@@ -147,7 +147,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px
 </section>
 
 <section id="calendar" class="view">
- <div class="card"><div class="section-head"><h3>Calendario semanal · por horas</h3><div><button class="btn small" onclick="weekOffset--,renderCalendar()">‹ Semana</button> <button class="btn small" onclick="weekOffset=0,renderCalendar()">Hoy</button> <button class="btn small" onclick="weekOffset++,renderCalendar()">Semana ›</button></div></div><div class="calendar-wrap"><div class="calendar-head" id="calendarHead"></div><div class="calendar-grid" id="calendarGrid"></div></div></div>
+ <div class="card"><div class="section-head"><h3>Calendario semanal · por horas <span id="calendarMonthLabel" class="muted" style="font-weight:600;text-transform:capitalize"></span></h3><div><button class="btn small" onclick="weekOffset--,renderCalendar()">‹ Semana</button> <button class="btn small" onclick="weekOffset=0,renderCalendar()">Hoy</button> <button class="btn small" onclick="weekOffset++,renderCalendar()">Semana ›</button></div></div><div class="calendar-wrap"><div class="calendar-head" id="calendarHead"></div><div class="calendar-grid" id="calendarGrid"></div></div></div>
  <div class="note" style="margin-top:12px"><b>Regla de agenda:</b> las citas solo deben ofrecerse después de validar horario, bloqueos de Calendar y festivos nacionales, autonómicos y locales de la empresa.</div>
 </section>
 
@@ -1745,6 +1745,11 @@ window.renderCalendar=function(){
   const base=new Date(); base.setHours(12,0,0,0); const day=base.getDay(); base.setDate(base.getDate()-((day+6)%7)+weekOffset*7);
   const days=[];for(let i=0;i<6;i++){const d=new Date(base);d.setDate(base.getDate()+i);days.push(d)}
   if($('calendarHead'))$('calendarHead').innerHTML='<div>Hora</div>'+days.map(d=>`<div>${['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][d.getDay()]} ${d.getDate()}</div>`).join('');
+  if($('calendarMonthLabel')){
+    const mf=new Intl.DateTimeFormat('es-ES',{month:'long',year:'numeric'});
+    const m0=mf.format(days[0]), m1=mf.format(days[days.length-1]);
+    $('calendarMonthLabel').textContent='— '+(m0===m1?m0:(mf.format(days[0]).split(' ')[0]+' – '+m1));
+  }
   const times=['09:00','10:00','11:00','12:00','13:00','16:00','17:00','18:00']; const grid=$('calendarGrid');if(!grid)return;grid.innerHTML='';
   const arr=scopedAppointments();
   times.forEach(t=>{grid.insertAdjacentHTML('beforeend',`<div class="slot time">${t}</div>`);days.forEach(d=>{const ds=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');const events=arr.filter(a=>a.date===ds&&a.time===t&&a.status!=='Cancelada');grid.insertAdjacentHTML('beforeend',`<div class="slot">${events.map(a=>`<div class="event" onclick="modifyAppointment('${esc(a.id)}')"><b>${esc(a.client)}</b>${esc(a.service)}</div>`).join('')}</div>`);});});

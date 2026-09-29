@@ -97,7 +97,15 @@ if(!/^[0-9a-f-]{36}$/i.test(empresaId)){
       if(r.ok && data.ok){
         document.getElementById("f").style.display="none";
         msg.className="ok"; msg.style.display="block";
-        msg.textContent="¡Gracias! Hemos recibido tu solicitud y nos pondremos en contacto contigo en breve.";
+        const extra=(data.mensaje||"").trim();
+        if(extra){
+          const linked=extra.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))
+                             .replace(/(https?:\/\/\S+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>')
+                             .replace(/\n/g,"<br>");
+          msg.innerHTML="¡Gracias! Hemos recibido tu solicitud.<br><br>"+linked;
+        }else{
+          msg.textContent="¡Gracias! Hemos recibido tu solicitud y nos pondremos en contacto contigo en breve.";
+        }
       }else{
         msg.className="err"; msg.style.display="block";
         msg.textContent="No se ha podido enviar la solicitud. Inténtalo de nuevo en unos minutos.";
