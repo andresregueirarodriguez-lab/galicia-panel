@@ -11,7 +11,7 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-
 .wrap{max-width:520px;margin:0 auto}
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 24px;box-shadow:0 1px 3px rgba(15,23,42,.06)}
 h1{font-size:22px;margin:0 0 4px}
-.sub{color:var(--muted);font-size:14px;margin:0 0 22px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 18px}
 label{display:block;font-size:13px;font-weight:600;margin:16px 0 6px}
 input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:15px;font-family:inherit;background:#fff;color:var(--fg)}
 textarea{resize:vertical;min-height:70px}
@@ -19,12 +19,16 @@ textarea{resize:vertical;min-height:70px}
 .row2>div{flex:1;min-width:0}
 .chk{display:flex;align-items:center;gap:8px;margin-top:18px;font-size:14px;font-weight:400}
 .chk input{width:auto}
-button{margin-top:22px;width:100%;padding:13px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-size:15px;font-weight:600;cursor:pointer}
-button:hover{background:var(--accent-d)}
-button:disabled{opacity:.6;cursor:default}
-#msg{margin-top:16px;font-size:14px;padding:12px 14px;border-radius:8px;display:none}
-#msg.ok{display:block;background:#dcfce7;color:#166534}
+.tabs{display:flex;gap:8px;margin-bottom:4px}
+.tab{flex:1;padding:10px;text-align:center;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted);background:#fff}
+.tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+button.submit{margin-top:22px;width:100%;padding:13px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-size:15px;font-weight:600;cursor:pointer}
+button.submit:hover{background:var(--accent-d)}
+button.submit:disabled{opacity:.6;cursor:default}
+#msg{margin-top:16px;font-size:14px;padding:12px 14px;border-radius:8px;display:none;line-height:1.6}
+#msg.ok{display:block;background:#f0fdf9;color:#0f172a;border:1px solid #99f6e4}
 #msg.err{display:block;background:#fee2e2;color:#991b1b}
+#msg a{color:var(--accent-d);font-weight:600}
 #gate{padding:40px 20px;text-align:center;color:var(--muted)}
 </style>
 </head>
@@ -32,7 +36,11 @@ button:disabled{opacity:.6;cursor:default}
 <div class="wrap">
   <div class="card" id="formCard" style="display:none">
     <h1 id="titulo">Solicitud de contacto</h1>
-    <p class="sub" id="subtitulo">Cuéntanos qué necesitas y te contactamos lo antes posible.</p>
+    <p class="sub" id="subtitulo">Dinos qué necesitas y te respondemos con la disponibilidad real, al momento.</p>
+    <div class="tabs">
+      <div class="tab active" id="tabNueva" onclick="setModo('solicitar')">Pedir una cita</div>
+      <div class="tab" id="tabModificar" onclick="setModo('modificar')">Cambiar mi cita</div>
+    </div>
     <form id="f">
       <label>Nombre y apellidos *</label>
       <input id="nombre" required>
@@ -40,18 +48,20 @@ button:disabled{opacity:.6;cursor:default}
         <div><label>Teléfono de contacto</label><input id="telefono" type="tel"></div>
         <div><label>Correo electrónico</label><input id="email" type="email"></div>
       </div>
-      <label>¿Qué servicio te interesa?</label>
-      <input id="tipo" placeholder="Ej: Comprar, Alquilar, Consulta...">
-      <label>Zona o ubicación de interés</label>
-      <input id="zona">
-      <div class="row2">
-        <div><label>Fecha preferida</label><input id="fecha" type="date"></div>
-        <div><label>Hora preferida</label><input id="hora" type="time"></div>
+      <div id="camposNuevos">
+        <label>¿Qué servicio te interesa?</label>
+        <input id="tipo" placeholder="Ej: Comprar, Alquilar, Consulta...">
+        <label>Zona o ubicación de interés</label>
+        <input id="zona">
+        <div class="row2">
+          <div><label>Fecha preferida</label><input id="fecha" type="date"></div>
+          <div><label>Hora preferida</label><input id="hora" type="time"></div>
+        </div>
       </div>
-      <label>¿Algo más que quieras contarnos?</label>
+      <label id="labelComentario">¿Algo más que quieras contarnos?</label>
       <textarea id="comentario"></textarea>
       <label class="chk"><input id="contacto" type="checkbox"> Prefiero que me llamen en vez de responder por email</label>
-      <button id="btn" type="submit">Enviar solicitud</button>
+      <button class="submit" id="btn" type="submit">Ver disponibilidad</button>
       <div id="msg"></div>
     </form>
   </div>
@@ -62,6 +72,16 @@ const params=new URLSearchParams(location.search);
 const empresaId=params.get("empresa")||"";
 const nombreEmpresa=params.get("nombre")||"";
 const FN_URL="https://vzcnxmlamtxbxwieqypp.supabase.co/functions/v1/solicitud-publica";
+let modo="solicitar";
+
+function setModo(m){
+  modo=m;
+  document.getElementById("tabNueva").classList.toggle("active",m==="solicitar");
+  document.getElementById("tabModificar").classList.toggle("active",m==="modificar");
+  document.getElementById("camposNuevos").style.display=m==="solicitar"?"block":"none";
+  document.getElementById("labelComentario").textContent=m==="solicitar"?"¿Algo más que quieras contarnos?":"Cuéntanos qué quieres cambiar (fecha, hora, o lo que necesites)";
+  document.getElementById("btn").textContent=m==="solicitar"?"Ver disponibilidad":"Ver mi cita y opciones";
+}
 
 if(!/^[0-9a-f-]{36}$/i.test(empresaId)){
   document.getElementById("gate").textContent="Este enlace de solicitud no es válido. Pide a la empresa un enlace actualizado.";
@@ -75,46 +95,45 @@ if(!/^[0-9a-f-]{36}$/i.test(empresaId)){
   document.getElementById("f").addEventListener("submit", async (e)=>{
     e.preventDefault();
     const btn=document.getElementById("btn"), msg=document.getElementById("msg");
-    msg.className=""; msg.style.display="none";
+    msg.className=""; msg.style.display="none"; msg.innerHTML="";
     const nombre=document.getElementById("nombre").value.trim();
     const telefono=document.getElementById("telefono").value.trim();
     const email=document.getElementById("email").value.trim();
     if(!nombre || (!telefono && !email)){
-      msg.className="err"; msg.textContent="Indica tu nombre y al menos un teléfono o email de contacto."; return;
+      msg.className="err"; msg.style.display="block";
+      msg.textContent="Indica tu nombre y al menos un teléfono o email de contacto."; return;
     }
-    btn.disabled=true; btn.textContent="Enviando...";
+    const textoAntes=btn.textContent;
+    btn.disabled=true; btn.textContent="Consultando...";
     try{
       const r=await fetch(FN_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-        empresa_id:empresaId, nombre, telefono, email,
-        tipo:document.getElementById("tipo").value.trim(),
-        zona:document.getElementById("zona").value.trim(),
-        fecha:document.getElementById("fecha").value,
-        hora:document.getElementById("hora").value,
+        empresa_id:empresaId, nombre, telefono, email, accion:modo,
+        tipo:(document.getElementById("tipo").value||"").trim(),
+        zona:(document.getElementById("zona").value||"").trim(),
+        fecha:(document.getElementById("fecha").value||""),
+        hora:(document.getElementById("hora").value||""),
         comentario:document.getElementById("comentario").value.trim(),
         contacto:document.getElementById("contacto").checked
       })});
       const data=await r.json().catch(()=>({}));
       if(r.ok && data.ok){
-        document.getElementById("f").style.display="none";
+        const html=(data.html||"").trim();
         msg.className="ok"; msg.style.display="block";
-        const extra=(data.mensaje||"").trim();
-        if(extra){
-          const linked=extra.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))
-                             .replace(/(https?:\/\/\S+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>')
-                             .replace(/\n/g,"<br>");
-          msg.innerHTML="¡Gracias! Hemos recibido tu solicitud.<br><br>"+linked;
+        if(html){
+          msg.innerHTML=html;
         }else{
           msg.textContent="¡Gracias! Hemos recibido tu solicitud y nos pondremos en contacto contigo en breve.";
         }
+        btn.disabled=false; btn.textContent=textoAntes;
       }else{
         msg.className="err"; msg.style.display="block";
-        msg.textContent="No se ha podido enviar la solicitud. Inténtalo de nuevo en unos minutos.";
-        btn.disabled=false; btn.textContent="Enviar solicitud";
+        msg.textContent="No se ha podido procesar la solicitud. Inténtalo de nuevo en unos minutos.";
+        btn.disabled=false; btn.textContent=textoAntes;
       }
     }catch(err){
       msg.className="err"; msg.style.display="block";
       msg.textContent="No se ha podido conectar. Comprueba tu conexión e inténtalo de nuevo.";
-      btn.disabled=false; btn.textContent="Enviar solicitud";
+      btn.disabled=false; btn.textContent=textoAntes;
     }
   });
 }
