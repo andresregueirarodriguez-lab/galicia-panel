@@ -1,0 +1,1787 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1220">
+<title>GalicIA Soluciones Empresariales</title>
+<style>
+:root{
+  --accent:#6d5dfc;--accent-soft:#eef2ff;--accent-2:#22c55e;
+  --bg:#f5f7fb;--panel:#fff;--text:#0f172a;--muted:#64748b;--line:#e5e7eb;
+  --nav:#0b1220;--nav2:#111a2b;--good:#16a34a;--warn:#f59e0b;--bad:#ef4444;
+  --shadow:0 12px 34px rgba(15,23,42,.08);--radius:18px
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:
+radial-gradient(circle at 10% 0%,rgba(109,93,252,.10),transparent 26%),
+radial-gradient(circle at 95% 5%,rgba(34,197,94,.07),transparent 24%),var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+.app{display:grid;grid-template-columns:278px 1fr;min-height:100vh}
+aside{background:linear-gradient(180deg,var(--nav),var(--nav2));color:#fff;padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:5px 9px 20px}.mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#22d3ee);display:grid;place-items:center;font-weight:900;box-shadow:0 8px 22px rgba(109,93,252,.3)}
+.brand b{display:block;font-size:14px}.brand small{color:#94a3b8;font-size:11px}.navlabel{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#64748b;padding:14px 12px 6px}
+.nav button{width:100%;border:0;background:transparent;color:#cbd5e1;padding:11px 12px;border-radius:12px;text-align:left;margin:3px 0;cursor:pointer;display:flex;gap:10px;align-items:center}
+.nav button.active,.nav button:hover{background:rgba(255,255,255,.09);color:#fff}.nav .badge-count{margin-left:auto;background:#ef4444;color:#fff;border-radius:999px;padding:2px 7px;font-size:10px}
+.profile{margin-top:18px;padding:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.05);border-radius:14px}.profile small{color:#94a3b8;display:block;margin-top:3px}
+main{padding:27px;max-width:1700px;width:100%}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}.top h1{margin:0;font-size:28px;letter-spacing:-.03em}.top p{margin:5px 0 0;color:var(--muted);font-size:14px}.actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#fff;color:var(--text);padding:9px 12px;border-radius:11px;font-weight:700;cursor:pointer;transition:.16s}.btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(15,23,42,.08)}.btn.primary{border:0;background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff}.btn.danger{background:#fff1f2;color:#be123c;border-color:#fecdd3}.btn.small{font-size:12px;padding:7px 9px}.btn.ghost{background:#f8fafc}
+.card{background:rgba(255,255,255,.94);border:1px solid rgba(229,231,235,.95);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.hero{background:linear-gradient(135deg,#111827,#312e81);color:#fff;position:relative;overflow:hidden;padding:27px}.hero:after{content:"✦";position:absolute;right:26px;top:-38px;font-size:170px;opacity:.06}.hero p{max-width:760px;color:#dbe4f1;line-height:1.55}.hero h2{font-size:29px;letter-spacing:-.03em;margin:12px 0 10px;max-width:820px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.two{display:grid;grid-template-columns:1.45fr 1fr;gap:14px;margin-top:14px}.metric small{color:var(--muted)}.metric strong{display:block;font-size:29px;margin:8px 0}.muted{color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800}.ok{background:#dcfce7;color:#166534}.warn{background:#fef3c7;color:#92400e}.bad{background:#fee2e2;color:#991b1b}.info{background:#e0e7ff;color:#3730a3}.neutral{background:#f1f5f9;color:#475569}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.section-head h3{margin:0;font-size:15px}
+.view{display:none}.view.active{display:block}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);font-size:13px}th{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}tr:last-child td{border-bottom:0}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}.toolbar input,.toolbar select{border:1px solid var(--line);background:#fff;border-radius:11px;padding:9px 11px}.toolbar input{min-width:260px;flex:1}
+.company-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.company-card{transition:.16s}.company-card:hover{transform:translateY(-2px)}.company-icon{width:46px;height:46px;border-radius:14px;background:var(--accent-soft);color:#4338ca;display:grid;place-items:center;font-weight:900}.company-card h3{margin:12px 0 5px}
+.field{margin:10px 0}.field label{display:block;font-size:12px;font-weight:800;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}.field textarea{min-height:90px;resize:vertical}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}
+.note{padding:12px;border-radius:10px;background:#fffbeb;color:#92400e;font-size:12px}.success-note{padding:12px;border-radius:10px;background:#ecfdf5;color:#166534;font-size:12px}
+.modal{display:none;position:fixed;inset:0;background:#0f172aa6;place-items:center;padding:20px;z-index:20}.modal.open{display:grid}.modalbox{background:#fff;width:min(780px,100%);max-height:90vh;overflow:auto;border-radius:18px;padding:22px}.modalhead{display:flex;justify-content:space-between;align-items:center}.modalhead h2{margin:0}
+.integration{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}.integration:last-child{border-bottom:0}.switch{width:46px;height:26px;border-radius:999px;background:#cbd5e1;position:relative;cursor:pointer;transition:.18s}.switch:after{content:"";width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;left:3px;top:3px;box-shadow:0 1px 4px #0002;transition:.18s}.switch.on{background:var(--good)}.switch.on:after{left:23px}.switch.pending{background:#f59e0b}
+.calendar-wrap{overflow:auto}.calendar-head{display:grid;grid-template-columns:70px repeat(6,minmax(145px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px 14px 0 0;overflow:hidden}.calendar-head div{background:#f8fafc;padding:10px;text-align:center;font-size:12px;font-weight:800}.calendar-grid{display:grid;grid-template-columns:70px repeat(6,minmax(145px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-top:0}.slot{background:#fff;min-height:64px;padding:6px}.time{background:#f8fafc;display:grid;place-items:center;color:var(--muted);font-size:11px}.event{border-radius:10px;padding:7px 8px;background:#eef2ff;border-left:4px solid var(--accent);font-size:11px;cursor:pointer}.event b{display:block}.holiday{background:#fff1f2!important;color:#9f1239;text-align:center;font-size:11px}
+.chat-list{display:grid;grid-template-columns:280px 1fr;gap:14px}.thread{padding:12px;border-bottom:1px solid var(--line);cursor:pointer}.thread.active{background:#f8fafc}.bubble{max-width:78%;padding:11px 13px;border-radius:14px;margin:8px 0;font-size:13px;line-height:1.45}.bubble.client{margin-left:auto;background:#e0e7ff}.bubble.bot{background:#f3f4f6}.timeline{display:flex;flex-direction:column;gap:11px}.timeline-item{display:flex;gap:10px}.dot{width:9px;height:9px;border-radius:50%;background:var(--accent);margin-top:5px;flex:0 0 auto}
+.tag{display:inline-block;background:#f1f5f9;color:#475569;padding:4px 7px;border-radius:8px;font-size:10px;margin:2px}
+.kb-row,.queue-row,.log-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.kb-row:last-child,.queue-row:last-child,.log-row:last-child{border-bottom:0}
+.settings-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.colorline{display:flex;gap:10px;align-items:center}.colorline input[type=color]{width:50px;height:38px;padding:2px}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+@media(max-width:1050px){.app{grid-template-columns:82px 1fr}.brand div:last-child,.nav button span,.navlabel,.profile{display:none}.nav button{justify-content:center}.grid4{grid-template-columns:repeat(2,1fr)}.company-grid,.grid3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.app{display:block}aside{display:none}main{padding:17px}.grid4,.grid3,.two,.company-grid,.settings-grid,.formgrid,.chat-list{grid-template-columns:1fr}.top{align-items:flex-start}.actions{justify-content:flex-end}.toolbar input{min-width:100%}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style id="galicia-realestate-ai-css">
+.property-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.property-card{overflow:hidden;padding:0}.property-cover{height:145px;background:linear-gradient(135deg,#dbeafe,#ede9fe);display:grid;place-items:center;font-size:42px}.property-body{padding:15px}.score{font-size:22px;font-weight:800;color:var(--accent)}.ai-glow{background:linear-gradient(135deg,#111827,#312e81);color:#fff}.ai-glow .muted{color:#c7d2fe}.match-row{display:grid;grid-template-columns:1fr 110px 150px auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.segmented{display:flex;gap:6px;flex-wrap:wrap}.segmented button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+@media(max-width:1050px){.property-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:760px){.property-grid{grid-template-columns:1fr}.match-row{grid-template-columns:1fr}}
+</style>
+
+</head>
+<body>
+
+<div id="authScreen" style="min-height:100vh;display:grid;place-items:center;padding:20px">
+  <div class="card" style="width:min(440px,100%);padding:28px">
+    <div class="brand" style="padding:0 0 18px;color:#0f172a"><div class="mark" style="color:white">G</div><div><b>GalicIA</b><small style="color:#64748b">Soluciones Empresariales</small></div></div>
+    <h2 style="margin:0 0 6px">Acceso al panel</h2>
+    <p class="muted">Superadmin y usuarios de empresa.</p>
+    <form onsubmit="loginReal(event)">
+      <div class="field"><label>Correo</label><input id="loginEmail" type="email" required autocomplete="username"></div>
+      <div class="field"><label>Contraseña</label><input id="loginPassword" type="password" required autocomplete="current-password"></div>
+      <div id="authError" class="note" style="display:none;margin-bottom:10px"></div>
+      <button id="loginBtn" class="btn primary" style="width:100%">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<div class="app" id="mainApp" style="display:none">
+<aside>
+ <div class="brand"><div class="mark">G</div><div><b id="brandMain">GalicIA</b><small id="brandSub">Soluciones Empresariales</small></div></div>
+ <div class="nav">
+  <button class="active" data-view="home">⌂ <span>Inicio</span></button>
+  <button data-view="companies">▦ <span>Empresas</span></button>
+  <button data-view="appointments">◫ <span>Citas</span></button>
+  <button data-view="propertyAI">⌂ <span>Inmuebles IA</span></button>
+  <button data-view="calendar">▣ <span>Calendario</span></button>
+  <button data-view="conversations">◌ <span>Conversaciones</span></button>
+  <button data-view="attention">! <span>Requiere atención</span><i class="badge-count" id="attentionCount">2</i></button>
+  <div class="navlabel">Operación</div>
+  <button data-view="queues">⇄ <span>Colas y SLA</span></button>
+  <button data-view="knowledge">▤ <span>Base de conocimiento</span></button>
+  <button data-view="analytics">⌁ <span>Analítica</span></button>
+  <button data-view="logs">≡ <span>Actividad y auditoría</span></button>
+  <div class="navlabel">Configuración</div>
+  <button data-view="ai">✦ <span>Asistente IA</span></button>
+  <button data-view="integrations">↗ <span>Integraciones</span></button>
+  <button data-view="business">◷ <span>Horarios y festivos</span></button>
+  <button data-view="settings">⚙ <span>Personalización</span></button>
+ </div>
+ <div class="profile"><b>Modo Superadmin</b><small>Vista completa del sistema</small></div>
+</aside>
+
+<main>
+<div class="top">
+ <div><h1 id="pageTitle">Centro de control</h1><p id="pageSub">Gestiona atención, agenda e IA desde un único lugar.</p></div>
+ <div class="actions">
+  <span id="currentUserChip" class="pill info">Sesión</span>
+  <button class="btn primary" onclick="openCompany()">+ Nueva empresa</button>
+ </div>
+</div>
+
+<section id="home" class="view active">
+ <div class="card hero"><span class="pill info">IA OPERATIVA</span><h2 id="heroTitle">Atención inteligente para empresas que quieren ahorrar tiempo y responder mejor.</h2><p>Centraliza empresas, formularios, citas, agenda y configuración de IA. WhatsApp se integrará al final, cuando el motor principal esté validado.</p></div>
+ <div class="grid4">
+  <div class="card metric"><small>Citas hoy</small><strong id="kpiAppointments">8</strong><span class="pill ok">+14% esta semana</span></div>
+  <div class="card metric"><small>Conversaciones gestionadas</small><strong id="kpiConversations">23</strong><span class="pill ok">19 automáticas</span></div>
+  <div class="card metric"><small>Requieren atención</small><strong id="kpiAttention">2</strong><span class="pill warn">Revisar</span></div>
+  <div class="card metric"><small>Empresas activas</small><strong id="kpiCompanies">1</strong><span class="pill ok">Operativo</span></div>
+ </div>
+ <div class="two">
+  <div class="card"><div class="section-head"><h3>Próximas citas</h3><button class="btn small" onclick="show('calendar')">Ver calendario</button></div><div id="homeAppointments"></div></div>
+  <div class="card"><div class="section-head"><h3>Actividad inteligente</h3><span class="pill ok">En tiempo real</span></div><div class="timeline" id="activityFeed"></div></div>
+ </div>
+</section>
+
+<section id="companies" class="view">
+ <div class="toolbar"><input id="companySearch" placeholder="Buscar empresa..." oninput="renderCompanies()"></div>
+ <div class="company-grid" id="companyGrid"></div>
+</section>
+
+<section id="appointments" class="view">
+ <div class="toolbar"><input id="appointmentSearch" placeholder="Buscar cliente, teléfono o servicio..." oninput="renderAppointments()"><select id="appointmentStatus" onchange="renderAppointments()"><option value="">Todos los estados</option><option>Confirmada</option><option>Pendiente</option><option>Cancelada</option></select><button class="btn primary" onclick="openAppointment()">+ Crear cita</button></div>
+ <div class="card"><div id="appointmentTable"></div></div>
+</section>
+
+
+<section id="propertyAI" class="view">
+ <div class="card ai-glow"><div class="section-head"><div><span class="pill info">NUEVO · MATCHING INTELIGENTE</span><h2 style="margin:10px 0 6px">Radar de oportunidades inmobiliarias</h2><p class="muted">La IA escucha al cliente, completa su perfil sin repetir preguntas y avisa solo cuando aparece una oportunidad relevante.</p></div><button class="btn primary" onclick="openPropertyAI()">+ Publicar inmueble</button></div></div>
+ <div class="grid4" style="margin-top:14px">
+  <div class="card metric"><small>Inmuebles activos</small><strong id="propKpiActive">0</strong><span class="pill ok">Catálogo vivo</span></div>
+  <div class="card metric"><small>Demandas activas</small><strong id="propKpiLeads">0</strong><span class="pill info">Perfiles IA</span></div>
+  <div class="card metric"><small>Coincidencias ≥ 75%</small><strong id="propKpiMatches">0</strong><span class="pill ok">Alta afinidad</span></div>
+  <div class="card metric"><small>Avisos preparados</small><strong id="propKpiAlerts">0</strong><span class="pill warn">WhatsApp</span></div>
+ </div>
+ <div class="toolbar" style="margin-top:14px"><div class="segmented"><button class="btn active" data-property-tab="catalog" onclick="propertyTab('catalog')">Catálogo</button><button class="btn" data-property-tab="demand" onclick="propertyTab('demand')">Demanda</button><button class="btn" data-property-tab="matches" onclick="propertyTab('matches')">Coincidencias</button><button class="btn" data-property-tab="assistant" onclick="propertyTab('assistant')">Agente IA</button></div><span style="flex:1"></span><button class="btn" onclick="openCompanySheet()">↗ Abrir CRM / Sheet</button><button class="btn" onclick="refreshPropertyAI()">↻ Actualizar</button></div>
+ <div id="propertyCatalogPanel"><div class="section-head"><h3>Inmuebles</h3><input id="propertySearch" placeholder="Buscar por referencia, zona o tipo..." oninput="renderPropertyCatalog()"></div><div id="propertyGrid" class="property-grid"></div></div>
+ <div id="propertyDemandPanel" style="display:none"><div class="section-head"><h3>Perfiles de búsqueda creados por la IA</h3><button class="btn primary" onclick="openDemandAI()">+ Añadir demanda</button></div><div class="card" id="demandTable"></div></div>
+ <div id="propertyMatchesPanel" style="display:none"><div class="section-head"><h3>Coincidencias explicadas</h3><button class="btn primary" onclick="runMatchingAI()">✦ Calcular matching</button></div><div class="card" id="matchesTable"></div></div>
+ <div id="propertyAssistantPanel" style="display:none"><div class="two"><div class="card"><h3>Personalidad del agente inmobiliario</h3><p><b>Profesional, cercano y natural.</b> Pregunta una cosa cada vez, recuerda lo ya dicho y explica por qué recomienda cada inmueble.</p><div class="note"><b>Reglas de seguridad:</b> no inventa precio, disponibilidad, estado ni características; pide el dato que falta o deriva a una persona.</div><p><span class="tag">Memoria de preferencias</span><span class="tag">Preguntas adaptativas</span><span class="tag">Explicación del match</span><span class="tag">Reserva de visita</span></p></div><div class="card"><h3>Secuencia automática</h3><div class="timeline"><div class="timeline-item"><i class="dot"></i><div><b>Comprende</b><div class="muted">Extrae operación, zona, presupuesto y necesidades.</div></div></div><div class="timeline-item"><i class="dot"></i><div><b>Completa</b><div class="muted">Pregunta solo el dato con mayor impacto que falta.</div></div></div><div class="timeline-item"><i class="dot"></i><div><b>Compara</b><div class="muted">Calcula afinidad y descarta incompatibles.</div></div></div><div class="timeline-item"><i class="dot"></i><div><b>Activa</b><div class="muted">Envía alerta, responde dudas y ofrece visita.</div></div></div></div></div></div></div>
+</section>
+
+<section id="calendar" class="view">
+ <div class="card"><div class="section-head"><h3>Calendario semanal · por horas</h3><div><button class="btn small" onclick="weekOffset--,renderCalendar()">‹ Semana</button> <button class="btn small" onclick="weekOffset=0,renderCalendar()">Hoy</button> <button class="btn small" onclick="weekOffset++,renderCalendar()">Semana ›</button></div></div><div class="calendar-wrap"><div class="calendar-head" id="calendarHead"></div><div class="calendar-grid" id="calendarGrid"></div></div></div>
+ <div class="note" style="margin-top:12px"><b>Regla de agenda:</b> las citas solo deben ofrecerse después de validar horario, bloqueos de Calendar y festivos nacionales, autonómicos y locales de la empresa.</div>
+</section>
+
+<section id="conversations" class="view">
+ <div class="chat-list">
+  <div class="card" id="threadList"></div>
+  <div class="card"><div class="section-head"><h3 id="chatTitle">Conversación</h3><span class="pill warn">WhatsApp pendiente</span></div><div id="chatBody"></div><div class="field"><label>Responder manualmente</label><textarea id="manualReply" placeholder="Escribe una respuesta..."></textarea></div><button class="btn primary" onclick="sendManualReply()">Enviar</button> <button class="btn" onclick="handoffSelected()">Derivar a persona</button></div>
+ </div>
+</section>
+
+<section id="attention" class="view">
+ <div class="card"><div class="section-head"><h3>Solicitudes que requieren atención</h3><span class="pill warn" id="attentionPill">2 pendientes</span></div><div id="attentionTable"></div></div>
+</section>
+
+<section id="queues" class="view">
+ <div class="grid3">
+  <div class="card metric"><small>En cola</small><strong id="queueCount">2</strong><span class="pill warn">Pendientes</span></div>
+  <div class="card metric"><small>SLA objetivo</small><strong>15 min</strong><span class="pill info">Atención humana</span></div>
+  <div class="card metric"><small>Tiempo medio</small><strong>7 min</strong><span class="pill ok">Dentro de SLA</span></div>
+ </div>
+ <div class="card" style="margin-top:14px"><div class="section-head"><h3>Colas de atención</h3><button class="btn small" onclick="addQueue()">+ Nueva cola</button></div><div id="queueList"></div></div>
+</section>
+
+<section id="knowledge" class="view">
+ <div class="toolbar"><input id="kbSearch" placeholder="Buscar en la base de conocimiento..." oninput="renderKB()"><button class="btn primary" onclick="openKB()">+ Añadir contenido</button></div>
+ <div class="card"><div id="kbList"></div></div>
+</section>
+
+<section id="analytics" class="view">
+ <div class="grid4">
+  <div class="card metric"><small>Tasa de automatización</small><strong>82%</strong><span class="pill ok">Alta</span></div>
+  <div class="card metric"><small>Conversión a cita</small><strong>41%</strong><span class="pill info">Últimos 30 días</span></div>
+  <div class="card metric"><small>Tiempo de primera respuesta</small><strong>12 s</strong><span class="pill ok">IA</span></div>
+  <div class="card metric"><small>Derivación humana</small><strong>9%</strong><span class="pill neutral">Controlada</span></div>
+ </div>
+ <div class="two"><div class="card"><h3>Canales</h3><table><tr><th>Canal</th><th>Conversaciones</th><th>Citas</th><th>Conversión</th></tr><tr><td>WhatsApp</td><td>148</td><td>67</td><td>45%</td></tr><tr><td>Google Forms</td><td>62</td><td>25</td><td>40%</td></tr></table></div><div class="card"><h3>Motivos de derivación</h3><p><span class="tag">Hablar con persona</span> 39%</p><p><span class="tag">Sin disponibilidad</span> 31%</p><p><span class="tag">Consulta compleja</span> 18%</p><p><span class="tag">Otros</span> 12%</p></div></div>
+</section>
+
+<section id="logs" class="view"><div class="card"><div class="section-head"><h3>Actividad y auditoría</h3><button class="btn small" onclick="exportData()">Exportar datos</button></div><div id="logList"></div></div></section>
+
+<section id="ai" class="view">
+ <div class="two">
+  <div class="card"><h3>Configuración del asistente</h3><div class="field"><label>Tono</label><select id="aiTone"><option>Profesional, cercano y natural</option><option>Formal</option><option>Dinámico y comercial</option><option>Conciso</option></select></div><div class="field"><label>Reglas</label><textarea id="aiRules"></textarea></div><div class="field"><label>Umbral de derivación</label><select id="handoffLevel"><option>Equilibrado</option><option>Conservador</option><option>Automatizar al máximo</option></select></div><button class="btn primary" onclick="saveAI()">Guardar IA</button></div>
+  <div class="card hero"><h2>Funciones empresariales del agente</h2><p>Contexto persistente, extracción de datos, detección de intención, clasificación, derivación a humano, colas, SLA, base de conocimiento, auditoría y control por empresa.</p></div>
+ </div>
+</section>
+
+<section id="integrations" class="view">
+ <div class="card"><div class="section-head"><h3>Integraciones</h3><span class="muted">Pulsa el interruptor para activar/desactivar</span></div><div id="integrationList"></div></div>
+</section>
+
+<section id="business" class="view">
+ <div class="settings-grid">
+  <div class="card"><h3>Horario de atención</h3><div id="scheduleEditor"></div><button class="btn primary" onclick="saveSchedule()">Guardar horario</button></div>
+  <div class="card"><h3>Festivos y cierres</h3><div class="field"><label>País</label><select id="country"><option>España</option></select></div><div class="field"><label>Comunidad</label><input id="region" value="Galicia"></div><div class="field"><label>Provincia</label><input id="province" value="Ourense"></div><div class="field"><label>Municipio</label><input id="municipality" value="Ourense"></div><div class="field"><label>Añadir cierre/festivo manual</label><div style="display:flex;gap:8px"><input id="holidayDate" type="date"><input id="holidayName" placeholder="Nombre"><button class="btn" onclick="addHoliday()">Añadir</button></div></div><div id="holidayList"></div></div>
+ </div>
+</section>
+
+<section id="settings" class="view">
+ <div class="settings-grid">
+  <div class="card"><h3>Marca y apariencia</h3><div class="field"><label>Nombre visible</label><input id="cfgName"></div><div class="field"><label>Texto secundario</label><input id="cfgSub"></div><div class="field"><label>Color principal</label><div class="colorline"><input id="cfgColor" type="color"><span class="muted">Botones y acentos</span></div></div><div class="field"><label>Mensaje principal</label><textarea id="cfgHero"></textarea></div><button class="btn primary" onclick="saveSettings()">Guardar apariencia</button></div>
+  <div class="card"><h3>Datos y mantenimiento</h3><p class="muted">Los datos operativos se leen de Supabase. Calendar y Sheets se asignan por empresa mediante el Motor Único.</p><button class="btn" onclick="exportData()">Exportar JSON</button> <label class="btn" style="display:inline-block">Importar JSON<input type="file" accept=".json" onchange="importData(event)" style="display:none"></label><button class="btn danger" onclick="resetAll()">Restablecer demo</button></div>
+ </div>
+ <div class="success-note" style="margin-top:14px"><b>Acceso:</b> autenticación real con Supabase. El superadmin gestiona todas las empresas; el usuario de empresa queda limitado por su asociación.</div>
+</section>
+</main>
+</div>
+
+<div id="companyModal" class="modal"><div class="modalbox"><div class="modalhead"><h2 id="companyModalTitle">Nueva empresa</h2><button class="btn small" onclick="closeModal('companyModal')">✕</button></div><form id="companyForm" class="formgrid" onsubmit="saveCompany(event)">
+<div class="field"><label>Nombre</label><input id="coName" required></div>
+<div class="field"><label>Sector</label><select id="coSector" required><option value="inmobiliaria">Inmobiliaria</option><option value="dental">Clínica dental</option><option value="peluqueria">Peluquería / estética</option><option value="fisioterapia">Fisioterapia</option><option value="general">Otro</option></select></div>
+<div class="field"><label>Email</label><input id="coEmail" type="email"></div><div class="field"><label>Teléfono / WhatsApp</label><input id="coWhatsapp"></div>
+<div class="field"><label>Provincia</label><input id="coProvince" value="Ourense"></div><div class="field"><label>Municipio</label><input id="coMunicipality" value="Ourense"></div>
+<div class="field"><label>Duración cita (min)</label><input id="coDuration" type="number" min="5" step="5" value="30"></div>
+<div class="field"><label>Zona horaria</label><input id="coTimezone" value="Europe/Madrid"></div>
+<div class="field full"><label>Servicios (separados por comas)</label><input id="coServices" placeholder="Comprar, vender, alquilar"></div>
+<div class="field full"><label>Reglas de IA</label><textarea id="coNotes" placeholder="Pregunta solo lo necesario. Nunca inventes disponibilidad..."></textarea></div>
+<input type="hidden" id="coId"><div class="full"><button class="btn" type="button" onclick="closeModal('companyModal')">Cancelar</button> <button id="saveCompanyBtn" class="btn primary">Guardar y preparar empresa</button></div>
+</form></div></div>
+
+<div id="appointmentModal" class="modal"><div class="modalbox"><div class="modalhead"><h2 id="appointmentModalTitle">Nueva cita</h2><button class="btn small" onclick="closeModal('appointmentModal')">✕</button></div><form id="appointmentForm" class="formgrid" onsubmit="saveAppointment(event)">
+<div class="field"><label>Empresa</label><select id="apCompany" required></select></div>
+<div class="field"><label>Cliente</label><input id="apClient" required></div>
+<div class="field"><label>Teléfono</label><input id="apPhone"></div>
+<div class="field"><label>Email</label><input id="apEmail" type="email"></div>
+<div class="field"><label>Servicio</label><input id="apService" required></div><div class="field"><label>Origen</label><select id="apOrigin"><option>WhatsApp</option><option>Google Forms</option><option>Manual</option></select></div>
+<div class="field"><label>Fecha</label><input id="apDate" type="date" required></div><div class="field"><label>Hora</label><input id="apTime" type="time" required></div>
+<div class="field"><label>Estado</label><select id="apStatus"><option>Pendiente</option><option>Confirmada</option><option>Cancelada</option></select></div>
+<div class="field full"><label>Nota</label><textarea id="apNote"></textarea></div><input type="hidden" id="apId"><div class="full"><button class="btn" type="button" onclick="closeModal('appointmentModal')">Cancelar</button> <button class="btn primary">Guardar cita</button></div></form></div></div>
+
+<div id="modifyModal" class="modal"><div class="modalbox" style="max-width:600px"><div class="modalhead"><h2>Modificar cita</h2><button class="btn small" onclick="closeModal('modifyModal')">✕</button></div><p id="modifyWho" class="muted"></p><div class="success-note"><b>Conectado al Motor Único.</b> El botón envía MODIFICAR_CITA con empresa_id, Event_ID, Cita_actual y Disponibilidad.</div><div class="formgrid"><div class="field"><label>Nueva fecha</label><input id="modDate" type="date"></div><div class="field"><label>Nueva hora</label><input id="modTime" type="time"></div><div class="field full"><label>Nota</label><textarea id="modNote"></textarea></div><input id="modId" type="hidden"><div class="full"><button class="btn" onclick="closeModal('modifyModal')">Cancelar</button> <button class="btn primary" onclick="applyModification()">Aplicar modificación</button></div></div></div></div>
+
+<div id="integrationModal" class="modal"><div class="modalbox" style="max-width:650px"><div class="modalhead"><h2 id="integrationTitle">Configurar integración</h2><button class="btn small" onclick="closeModal('integrationModal')">✕</button></div><div class="field"><label>Nombre / conexión</label><input id="intName"></div><div class="field"><label>Webhook / identificador</label><input id="intEndpoint" placeholder="URL, Calendar ID, número, etc."></div><div class="field"><label>Notas</label><textarea id="intNotes"></textarea></div><input id="intId" type="hidden"><button class="btn primary" onclick="saveIntegrationConfig()">Guardar configuración</button></div></div>
+
+<div id="kbModal" class="modal"><div class="modalbox" style="max-width:650px"><div class="modalhead"><h2>Base de conocimiento</h2><button class="btn small" onclick="closeModal('kbModal')">✕</button></div><div class="field"><label>Título</label><input id="kbTitle"></div><div class="field"><label>Contenido</label><textarea id="kbContent"></textarea></div><button class="btn primary" onclick="saveKB()">Guardar</button></div></div>
+
+
+<div id="propertyAIModal" class="modal"><div class="modalbox"><div class="modalhead"><h2>Publicar inmueble con IA</h2><button class="btn small" onclick="closeModal('propertyAIModal')">✕</button></div><form class="formgrid" onsubmit="savePropertyAI(event)">
+<input id="propId" type="hidden"><div class="field"><label>Referencia</label><input id="propRef" required placeholder="OU-001"></div><div class="field"><label>Operación</label><select id="propOperation"><option>venta</option><option>alquiler</option></select></div><div class="field"><label>Tipo</label><select id="propType"><option>piso</option><option>casa</option><option>chalet</option><option>local</option><option>terreno</option></select></div><div class="field"><label>Precio (€)</label><input id="propPrice" type="number" min="0" required></div><div class="field"><label>Zona</label><input id="propZone" required placeholder="Ourense centro"></div><div class="field"><label>Municipio</label><input id="propTown" value="Ourense"></div><div class="field"><label>Habitaciones</label><input id="propRooms" type="number" min="0" value="3"></div><div class="field"><label>Baños</label><input id="propBaths" type="number" min="0" value="2"></div><div class="field"><label>Superficie (m²)</label><input id="propArea" type="number" min="0"></div><div class="field"><label>Estado</label><select id="propStatus"><option value="borrador">Borrador IA</option><option value="activo">Publicar</option><option value="reservado">Reservado</option></select></div><div class="field full"><label>Características</label><input id="propFeatures" placeholder="garaje, ascensor, terraza, exterior"></div><div class="field full"><label>Información base para la IA</label><textarea id="propDescription" placeholder="Describe lo que sabes. La IA lo organizará sin inventar datos."></textarea></div><div class="full"><button class="btn" type="button" onclick="closeModal('propertyAIModal')">Cancelar</button> <button class="btn primary">✦ Guardar y activar IA</button></div></form></div></div>
+<div id="demandAIModal" class="modal"><div class="modalbox"><div class="modalhead"><h2>Perfil de búsqueda</h2><button class="btn small" onclick="closeModal('demandAIModal')">✕</button></div><form class="formgrid" onsubmit="saveDemandAI(event)"><div class="field"><label>Cliente</label><input id="demName" required></div><div class="field"><label>Teléfono WhatsApp</label><input id="demPhone" required></div><div class="field"><label>Operación</label><select id="demOperation"><option>venta</option><option>alquiler</option></select></div><div class="field"><label>Presupuesto máximo (€)</label><input id="demBudget" type="number" min="0"></div><div class="field"><label>Zonas preferidas</label><input id="demZones" placeholder="Centro, Barrocás"></div><div class="field"><label>Habitaciones mínimas</label><input id="demRooms" type="number" min="0" value="2"></div><div class="field full"><label>Necesidades y contexto</label><textarea id="demNotes" placeholder="Familia, garaje imprescindible, cerca de colegios..."></textarea></div><div class="field full"><label><input id="demConsent" type="checkbox" required> El cliente acepta recibir alertas de inmuebles por WhatsApp y puede cancelarlas cuando quiera.</label></div><div class="full"><button class="btn" type="button" onclick="closeModal('demandAIModal')">Cancelar</button> <button class="btn primary">Guardar perfil</button></div></form></div></div>
+
+<script>
+const defaults={
+ settings:{name:"GalicIA Soluciones Empresariales",sub:"Soluciones Empresariales",color:"#6d5dfc",hero:"Atención inteligente para empresas que quieren ahorrar tiempo y responder mejor.",aiTone:"Profesional, cercano y natural",aiRules:"Pregunta solo lo necesario. No repitas datos. Nunca inventes disponibilidad. Ofrece únicamente huecos verificados. Respeta horarios, festivos y bloqueos. Deriva cuando sea necesario.",handoff:"Equilibrado"},
+ companies:[{id:"EMP001",name:"GalicIA Inmobiliaria",sector:"Inmobiliaria",email:"",whatsapp:"",province:"Ourense",municipality:"Ourense",services:"Comprar, vender, alquilar",notes:"Empresa de demostración",active:true}],
+ appointments:[
+ {id:"CITA001",company:"EMP001",client:"María López",phone:"600111222",service:"Comprar vivienda",origin:"WhatsApp",date:"2026-09-08",time:"10:00",status:"Confirmada",event:"evt_demo_001",note:""},
+ {id:"CITA002",company:"EMP001",client:"Carlos Pérez",phone:"600333444",service:"Vender vivienda",origin:"Google Forms",date:"2026-09-08",time:"12:00",status:"Confirmada",event:"evt_demo_002",note:""},
+ {id:"CITA003",company:"EMP001",client:"Ana Torres",phone:"600555666",service:"Alquilar",origin:"WhatsApp",date:"2026-09-10",time:"17:00",status:"Pendiente",event:"",note:"Pendiente de confirmación"}
+ ],
+ conversations:[
+ {id:"CONV001",name:"María López",channel:"WhatsApp",status:"IA activa",human:false,messages:[["client","Quiero ver un piso en Ourense. El jueves por la tarde."],["bot","He comprobado la agenda. ¿Te viene bien a las 17:00?"],["client","Sí, perfecto."],["bot","Listo. Tu cita queda confirmada para el jueves a las 17:00."]]},
+ {id:"CONV002",name:"Lucía Fernández",channel:"WhatsApp",status:"Requiere atención",human:true,messages:[["client","Necesito hablar con una persona."],["bot","De acuerdo. Voy a dejar tu solicitud preparada para que te atienda alguien del equipo."]]}
+ ],
+ attention:[{id:"ATT001",name:"Lucía Fernández",reason:"Solicita hablar con un agente",channel:"WhatsApp",since:"8 min"},{id:"ATT002",name:"Javier Gómez",reason:"No se encontró disponibilidad automática",channel:"Google Forms",since:"21 min"}],
+ integrations:[
+ {id:"INT1",name:"WhatsApp Business",desc:"Conversaciones y confirmaciones",state:"on",endpoint:"",notes:""},
+ {id:"INT2",name:"Google Calendar",desc:"Agenda y disponibilidad real",state:"on",endpoint:"",notes:""},
+ {id:"INT3",name:"Google Forms + Gmail",desc:"Solicitudes y respuestas",state:"on",endpoint:"",notes:""},
+ {id:"INT4",name:"Google Sheets",desc:"Registro central actual",state:"on",endpoint:"",notes:""},
+ {id:"INT5",name:"Make · Modificar cita",desc:"Escenario existente reservado",state:"on",endpoint:"PENDIENTE_WEBHOOK_MAKE",notes:"No sustituir el escenario existente"}
+ ],
+ queues:[{id:"Q1",name:"Atención comercial",priority:"Normal",sla:"15 min"},{id:"Q2",name:"Incidencias / derivación",priority:"Alta",sla:"10 min"}],
+ knowledge:[{id:"KB1",title:"Servicios inmobiliarios",content:"Información general sobre compra, venta y alquiler."},{id:"KB2",title:"Política de citas",content:"Las citas solo se confirman después de validar disponibilidad real."}],
+ holidays:[{date:"2026-12-25",name:"Navidad"},{date:"2026-01-01",name:"Año Nuevo"}],
+ schedule:{Lunes:["09:00","14:00","16:00","19:00"],Martes:["09:00","14:00","16:00","19:00"],Miércoles:["09:00","14:00","16:00","19:00"],Jueves:["09:00","14:00","16:00","19:00"],Viernes:["09:00","14:00","16:00","19:00"],Sábado:["09:00","14:00","",""],Domingo:["","","",""]},
+ logs:[{time:"Ahora",text:"Sistema iniciado con configuración de demostración."}]
+};
+let state,selectedConversation="CONV001",weekOffset=0;
+function loadState(){const raw=localStorage.getItem("galiciaEnterpriseState");state=raw?JSON.parse(raw):structuredClone(defaults);saveState()}
+function saveState(){localStorage.setItem("galiciaEnterpriseState",JSON.stringify(state));updateKPIs()}
+function log(text){state.logs.unshift({time:new Date().toLocaleString("es-ES"),text});state.logs=state.logs.slice(0,100);saveState();renderLogs()}
+const titles={propertyAI:["Inmuebles IA","Catálogo, demanda y coincidencias por empresa."],home:["Centro de control","Gestiona atención, agenda e IA desde un único lugar."],companies:["Empresas","Administra todos tus clientes desde el panel central."],appointments:["Citas","Consulta y gestiona todas las citas."],calendar:["Calendario","Vista semanal por días y horas."],conversations:["Conversaciones","Atención con contexto y seguimiento."],attention:["Requiere atención","Casos que necesitan intervención de una persona."],queues:["Colas y SLA","Organiza la atención humana y los tiempos objetivo."],knowledge:["Base de conocimiento","Contenido que utiliza el asistente para responder."],analytics:["Analítica","Métricas de atención, automatización y conversión."],logs:["Actividad y auditoría","Registro de cambios y acciones del sistema."],ai:["Asistente IA","Configura comportamiento y criterios de derivación."],integrations:["Integraciones","Activa, desactiva y configura los canales."],business:["Horarios y festivos","Controla cuándo se pueden ofrecer citas."],settings:["Personalización","Modifica apariencia, textos y datos del panel."]};
+function show(id){document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===id));const pt=document.getElementById("pageTitle"), psu=document.getElementById("pageSub"); if(pt)pt.textContent=titles[id][0]; if(psu)psu.textContent=titles[id][1];if(id==="calendar")renderCalendar()}
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>show(b.dataset.view));
+function updateKPIs(){if(!state)return;kpiAppointments.textContent=state.appointments.filter(a=>a.date==="2026-09-08"&&a.status!=="Cancelada").length;kpiConversations.textContent=state.conversations.length;kpiAttention.textContent=state.attention.length;kpiCompanies.textContent=state.companies.filter(c=>c.active).length;attentionCount.textContent=state.attention.length;attentionPill.textContent=state.attention.length+" pendientes";queueCount.textContent=state.attention.length}
+function applyBrand(){document.documentElement.style.setProperty("--accent",state.settings.color);cfgName.value=state.settings.name;cfgSub.value=state.settings.sub;cfgColor.value=state.settings.color;cfgHero.value=state.settings.hero;heroTitle.textContent=state.settings.hero;brandMain.textContent=state.settings.name.replace(" Soluciones Empresariales","");brandSub.textContent=state.settings.sub;aiTone.value=state.settings.aiTone;aiRules.value=state.settings.aiRules;handoffLevel.value=state.settings.handoff}
+function renderHome(){homeAppointments.innerHTML=tableAppointments(state.appointments.slice(0,3),true);activityFeed.innerHTML=state.logs.slice(0,4).map(l=>`<div class="timeline-item"><i class="dot"></i><div><b>${escapeHtml(l.text)}</b><div class="muted" style="font-size:11px">${escapeHtml(l.time)}</div></div></div>`).join("")}
+function demo_renderCompanies(){const q=(companySearch?.value||"").toLowerCase();const arr=state.companies.filter(c=>(c.name+" "+c.sector+" "+c.municipality).toLowerCase().includes(q));companyGrid.innerHTML=arr.map(c=>`<div class="card company-card"><div class="company-icon">${c.name.split(" ").map(x=>x[0]).slice(0,2).join("").toUpperCase()}</div><h3>${escapeHtml(c.name)}</h3><p class="muted">${escapeHtml(c.sector)} · ${escapeHtml(c.municipality||"")}</p><span class="pill ${c.active?"ok":"neutral"}">${c.active?"Activa":"Inactiva"}</span><p><button class="btn small" onclick="editCompany('${c.id}')">Configurar</button> <button class="btn small" onclick="toggleCompany('${c.id}')">${c.active?"Desactivar":"Activar"}</button></p></div>`).join("")+`<div class="card" style="text-align:center;cursor:pointer" onclick="openCompany()"><h2 style="color:var(--accent)">＋</h2><b>Añadir empresa</b><p class="muted">Alta guiada</p></div>`}
+function demo_openCompany(){companyForm.reset();coId.value="";companyModalTitle.textContent="Nueva empresa";openModal("companyModal")}
+function demo_editCompany(id){const c=state.companies.find(x=>x.id===id);coId.value=c.id;coName.value=c.name;coSector.value=c.sector;coEmail.value=c.email;coWhatsapp.value=c.whatsapp;coProvince.value=c.province;coMunicipality.value=c.municipality;coServices.value=c.services;coNotes.value=c.notes;companyModalTitle.textContent="Configurar empresa";openModal("companyModal")}
+function demo_saveCompany(e){e.preventDefault();const id=coId.value||"EMP"+Date.now();const obj={id,name:coName.value,sector:coSector.value,email:coEmail.value,whatsapp:coWhatsapp.value,province:coProvince.value,municipality:coMunicipality.value,services:coServices.value,notes:coNotes.value,active:true};const i=state.companies.findIndex(x=>x.id===id);if(i>=0)state.companies[i]={...state.companies[i],...obj};else state.companies.push(obj);log("Empresa guardada: "+obj.name);closeModal("companyModal");renderAll()}
+function demo_toggleCompany(id){const c=state.companies.find(x=>x.id===id);c.active=!c.active;log((c.active?"Empresa activada: ":"Empresa desactivada: ")+c.name);renderAll()}
+function tableAppointments(arr,compact=false){if(!arr.length)return'<div class="empty">No hay citas.</div>';return `<table><tr><th>Fecha</th><th>Cliente</th><th>Servicio</th><th>Origen</th><th>Estado</th><th></th></tr>${arr.map(a=>`<tr><td>${a.date} ${a.time}</td><td>${escapeHtml(a.client)}</td><td>${escapeHtml(a.service)}</td><td>${escapeHtml(a.origin)}</td><td><span class="pill ${a.status==="Confirmada"?"ok":a.status==="Pendiente"?"warn":"bad"}">${a.status}</span></td><td>${compact?`<button class="btn small" onclick="modifyAppointment('${a.id}')">Modificar</button>`:`<button class="btn small" onclick="editAppointment('${a.id}')">Editar</button> <button class="btn small" onclick="modifyAppointment('${a.id}')">Modificar</button> <button class="btn small danger" onclick="deleteAppointment('${a.id}')">Borrar</button>`}</td></tr>`).join("")}</table>`}
+function renderAppointments(){const q=(appointmentSearch?.value||"").toLowerCase(),s=appointmentStatus?.value||"";const arr=state.appointments.filter(a=>(a.client+" "+a.phone+" "+a.service).toLowerCase().includes(q)&&(!s||a.status===s));appointmentTable.innerHTML=tableAppointments(arr)}
+function openAppointment(){appointmentForm.reset();apId.value="";appointmentModalTitle.textContent="Nueva cita";openModal("appointmentModal")}
+function editAppointment(id){const a=state.appointments.find(x=>x.id===id);apId.value=a.id;apClient.value=a.client;apPhone.value=a.phone;apService.value=a.service;apOrigin.value=a.origin;apDate.value=a.date;apTime.value=a.time;apStatus.value=a.status;apEvent.value=a.event;apNote.value=a.note;appointmentModalTitle.textContent="Editar cita";openModal("appointmentModal")}
+function saveAppointment(e){e.preventDefault();const id=apId.value||"CITA"+Date.now();const a={id,company:"EMP001",client:apClient.value,phone:apPhone.value,service:apService.value,origin:apOrigin.value,date:apDate.value,time:apTime.value,status:apStatus.value,event:apEvent.value,note:apNote.value};const i=state.appointments.findIndex(x=>x.id===id);if(i>=0)state.appointments[i]=a;else state.appointments.push(a);log("Cita guardada: "+a.client+" "+a.date+" "+a.time);closeModal("appointmentModal");renderAll()}
+function deleteAppointment(id){if(!confirm("¿Borrar esta cita?"))return;const a=state.appointments.find(x=>x.id===id);state.appointments=state.appointments.filter(x=>x.id!==id);log("Cita eliminada: "+a.client);renderAll()}
+function demo_modifyAppointment(id){const a=state.appointments.find(x=>x.id===id);modId.value=id;modifyWho.textContent=`${a.client} · ${a.date} ${a.time} · Event-ID: ${a.event||"sin Event-ID"}`;modDate.value=a.date;modTime.value=a.time;modNote.value="";openModal("modifyModal")}
+function demo_applyModification(){const a=state.appointments.find(x=>x.id===modId.value);a.date=modDate.value;a.time=modTime.value;a.note=modNote.value;log("Cita modificada: "+a.client+" → "+a.date+" "+a.time+" (pendiente de conectar al webhook Make real)");closeModal("modifyModal");renderAll();alert("Modificación aplicada en la interfaz. Cuando pegues el webhook real, este mismo botón llamará al escenario Make existente.")}
+function renderCalendar(){const base=new Date("2026-09-07T12:00:00");base.setDate(base.getDate()+weekOffset*7);const days=[];for(let i=0;i<6;i++){let d=new Date(base);d.setDate(base.getDate()+i);days.push(d)};calendarHead.innerHTML='<div>Hora</div>'+days.map(d=>`<div>${["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"][d.getDay()]} ${d.getDate()}</div>`).join("");const times=["09:00","10:00","11:00","12:00","13:00","16:00","17:00","18:00"];calendarGrid.innerHTML="";times.forEach(t=>{calendarGrid.insertAdjacentHTML("beforeend",`<div class="slot time">${t}</div>`);days.forEach(d=>{const ds=d.toISOString().slice(0,10);const hol=state.holidays.find(h=>h.date===ds);const events=state.appointments.filter(a=>a.date===ds&&a.time===t&&a.status!=="Cancelada");calendarGrid.insertAdjacentHTML("beforeend",`<div class="slot ${hol?"holiday":""}">${hol?`<b>${escapeHtml(hol.name)}</b><br>Sin citas`:events.map(a=>`<div class="event" onclick="editAppointment('${a.id}')"><b>${escapeHtml(a.client)}</b>${escapeHtml(a.service)}</div>`).join("")}</div>`)})})}
+function renderThreads(){threadList.innerHTML=state.conversations.map(c=>`<div class="thread ${c.id===selectedConversation?"active":""}" onclick="selectConversation('${c.id}')"><b>${escapeHtml(c.name)}</b><div class="muted" style="font-size:11px">${c.channel} · ${c.status}</div></div>`).join("");const c=state.conversations.find(x=>x.id===selectedConversation)||state.conversations[0];if(!c)return;chatTitle.textContent=c.channel+" · "+c.name;chatBody.innerHTML=c.messages.map(m=>`<div class="bubble ${m[0]==="client"?"client":"bot"}">${escapeHtml(m[1])}</div>`).join("")}
+function selectConversation(id){selectedConversation=id;renderThreads()}
+function sendManualReply(){alert("El envío WhatsApp todavía no está conectado. El texto no se ha enviado y se conserva en el cuadro.")}
+function handoffSelected(){const c=state.conversations.find(x=>x.id===selectedConversation);if(!c)return;c.human=true;c.status="Requiere atención";if(!state.attention.find(x=>x.name===c.name))state.attention.push({id:"ATT"+Date.now(),name:c.name,reason:"Derivación manual",channel:c.channel,since:"Ahora"});log("Conversación derivada a persona: "+c.name);renderAll()}
+function renderAttention(){attentionTable.innerHTML=state.attention.length?`<table><tr><th>Cliente</th><th>Motivo</th><th>Canal</th><th>Desde</th><th></th></tr>${state.attention.map(a=>`<tr><td>${escapeHtml(a.name)}</td><td>${escapeHtml(a.reason)}</td><td>${escapeHtml(a.channel)}</td><td>${escapeHtml(a.since)}</td><td><button class="btn small primary" onclick="resolveAttention('${a.id}')">Resolver</button></td></tr>`).join("")}</table>`:'<div class="empty">No hay solicitudes pendientes.</div>'}
+function resolveAttention(id){const a=state.attention.find(x=>x.id===id);state.attention=state.attention.filter(x=>x.id!==id);log("Atención resuelta: "+a.name);renderAll()}
+function renderQueues(){queueList.innerHTML=state.queues.map(q=>`<div class="queue-row"><div><b>${escapeHtml(q.name)}</b><div class="muted" style="font-size:11px">Prioridad ${q.priority}</div></div><div><span class="pill info">SLA ${q.sla}</span></div></div>`).join("")}
+function addQueue(){const name=prompt("Nombre de la nueva cola");if(!name)return;state.queues.push({id:"Q"+Date.now(),name,priority:"Normal",sla:"15 min"});log("Cola creada: "+name);renderQueues()}
+function renderKB(){const q=(kbSearch?.value||"").toLowerCase();const arr=state.knowledge.filter(k=>(k.title+" "+k.content).toLowerCase().includes(q));kbList.innerHTML=arr.map(k=>`<div class="kb-row"><div><b>${escapeHtml(k.title)}</b><div class="muted" style="font-size:12px">${escapeHtml(k.content)}</div></div><button class="btn small danger" onclick="deleteKB('${k.id}')">Borrar</button></div>`).join("")||'<div class="empty">Sin contenido.</div>'}
+function openKB(){kbTitle.value="";kbContent.value="";openModal("kbModal")}
+function saveKB(){if(!kbTitle.value.trim())return;state.knowledge.push({id:"KB"+Date.now(),title:kbTitle.value.trim(),content:kbContent.value.trim()});log("Contenido añadido a la base de conocimiento: "+kbTitle.value.trim());closeModal("kbModal");renderKB()}
+function deleteKB(id){state.knowledge=state.knowledge.filter(x=>x.id!==id);log("Contenido eliminado de la base de conocimiento");renderKB()}
+function renderIntegrations(){integrationList.innerHTML=state.integrations.map(i=>`<div class="integration"><div><b>${escapeHtml(i.name)}</b><br><small class="muted">${escapeHtml(i.desc)}</small></div><button class="btn small" onclick="configureIntegration('${i.id}')">Configurar</button><div class="switch ${i.state==="on"?"on":i.state==="pending"?"pending":""}" onclick="toggleIntegration('${i.id}')" title="Activar/desactivar"></div></div>`).join("")}
+function toggleIntegration(id){const i=state.integrations.find(x=>x.id===id);i.state=i.state==="on"?"off":"on";log("Integración "+i.name+": "+(i.state==="on"?"activada":"desactivada"));renderIntegrations()}
+function configureIntegration(id){const i=state.integrations.find(x=>x.id===id);intId.value=id;integrationTitle.textContent="Configurar "+i.name;intName.value=i.name;intEndpoint.value=i.endpoint||"";intNotes.value=i.notes||"";openModal("integrationModal")}
+function saveIntegrationConfig(){const i=state.integrations.find(x=>x.id===intId.value);i.endpoint=intEndpoint.value;i.notes=intNotes.value;log("Configuración actualizada: "+i.name);closeModal("integrationModal");renderIntegrations()}
+function renderSchedule(){scheduleEditor.innerHTML=Object.entries(state.schedule).map(([d,v])=>`<div class="field"><label>${d}</label><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px"><input data-day="${d}" data-i="0" type="time" value="${v[0]}"><input data-day="${d}" data-i="1" type="time" value="${v[1]}"><input data-day="${d}" data-i="2" type="time" value="${v[2]}"><input data-day="${d}" data-i="3" type="time" value="${v[3]}"></div></div>`).join("")}
+function demo_saveSchedule(){document.querySelectorAll("[data-day]").forEach(el=>state.schedule[el.dataset.day][+el.dataset.i]=el.value);log("Horario actualizado");saveState()}
+function addHoliday(){if(!holidayDate.value||!holidayName.value.trim())return;state.holidays.push({date:holidayDate.value,name:holidayName.value.trim()});holidayDate.value="";holidayName.value="";log("Festivo/cierre añadido");renderHolidays();renderCalendar()}
+function renderHolidays(){holidayList.innerHTML=state.holidays.map((h,i)=>`<div class="kb-row"><div><b>${h.date}</b><div class="muted">${escapeHtml(h.name)}</div></div><button class="btn small danger" onclick="state.holidays.splice(${i},1);log('Festivo eliminado');renderHolidays();renderCalendar()">Borrar</button></div>`).join("")}
+function demo_saveAI(){state.settings.aiTone=aiTone.value;state.settings.aiRules=aiRules.value;state.settings.handoff=handoffLevel.value;log("Configuración de IA actualizada");saveState()}
+function saveSettings(){state.settings.name=cfgName.value||defaults.settings.name;state.settings.sub=cfgSub.value||defaults.settings.sub;state.settings.color=cfgColor.value;state.settings.hero=cfgHero.value;log("Personalización actualizada");applyBrand();saveState()}
+function renderLogs(){logList.innerHTML=state.logs.map(l=>`<div class="log-row"><div><b>${escapeHtml(l.text)}</b><div class="muted" style="font-size:11px">${escapeHtml(l.time)}</div></div></div>`).join("")}
+function demo_changeViewMode(){const mode=viewMode.value;document.querySelector(".profile b").textContent=mode==="superadmin"?"Modo Superadmin":"Modo Empresa";document.querySelector(".profile small").textContent=mode==="superadmin"?"Vista completa del sistema":"Vista limitada a la empresa";document.querySelector('[data-view="companies"]').style.display=mode==="superadmin"?"flex":"none";log("Cambio de vista: "+mode)}
+function openModal(id){document.getElementById(id).classList.add("open")}function closeModal(id){document.getElementById(id).classList.remove("open")}
+function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="GalicIA_configuracion_"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(a.href)}
+function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{state=JSON.parse(r.result);saveState();renderAll();alert("Configuración importada.")}catch{alert("JSON no válido.")}};r.readAsText(f)}
+function resetAll(){if(!confirm("¿Restablecer toda la demo?"))return;localStorage.removeItem("galiciaEnterpriseState");loadState(); /* renderAll se ejecuta tras autenticación real */alert("Demo restablecida.")}
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function renderAll(){applyBrand();renderHome();renderCompanies();renderAppointments();renderCalendar();renderThreads();renderAttention();renderQueues();renderKB();renderIntegrations();renderSchedule();renderHolidays();renderLogs();updateKPIs()}
+loadState();renderAll();
+</script>
+
+<script>
+/* ===== GalicIA · capa real multiempresa ===== */
+const SUPABASE_URL = "https://vzcnxmlamtxbxwieqypp.supabase.co";
+const SUPABASE_KEY = "sb_publishable_iAQauUpghQnEPe0fdyMgvA_MVxdHU0M";
+const MOTOR_WEBHOOK = "https://hook.eu1.make.com/e4im9smt2cfeb2p73kps2n78iczutq03";
+let sb;
+try{
+  if(!window.supabase) throw new Error("No se pudo cargar la librería de Supabase. Comprueba que tienes Internet y vuelve a abrir el archivo.");
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}catch(e){
+  const box=document.getElementById("authError");
+  if(box){box.textContent=e.message;box.style.display="block";}
+  console.error(e);
+}
+
+let authUser=null, authProfile=null, memberships=[], motorConfigs=[];
+let realMode=true;
+
+const sectorDefaults = {
+  inmobiliaria:{services:["Comprar","Vender","Alquilar"]},
+  dental:{services:["Revisión","Limpieza","Consulta dental"]},
+  peluqueria:{services:["Corte","Peinado","Coloración"]},
+  fisioterapia:{services:["Valoración","Sesión de fisioterapia","Rehabilitación"]},
+  general:{services:["Consulta"]}
+};
+function normSector(s){
+  s=String(s||"general").toLowerCase();
+  if(s.includes("inmob")) return "inmobiliaria";
+  if(s.includes("dental")) return "dental";
+  if(s.includes("pelu")||s.includes("estét")||s.includes("estet")) return "peluqueria";
+  if(s.includes("fisio")) return "fisioterapia";
+  return s||"general";
+}
+function defaultSchedule(){
+ return {lunes:["09:00","14:00","16:00","19:00"],martes:["09:00","14:00","16:00","19:00"],miercoles:["09:00","14:00","16:00","19:00"],jueves:["09:00","14:00","16:00","19:00"],viernes:["09:00","14:00","16:00","19:00"],sabado:["09:00","14:00"],domingo:[]};
+}
+function servicesJSON(text,sector){
+ const arr=String(text||"").split(",").map(x=>x.trim()).filter(Boolean);
+ const use=arr.length?arr:(sectorDefaults[sector]?.services||["Consulta"]);
+ return use.map(nombre=>({nombre,activo:true}));
+}
+function companyFromDb(c){
+ return {id:c.id,name:c.nombre_comercial||c.nombre||"Empresa",sector:c.sector||"General",email:c.email||"",whatsapp:c.whatsapp_numero||c.telefono||"",province:c.provincia||"",municipality:c.municipio||"",services:"",notes:"",active:c.activa!==false};
+}
+function appointmentFromDb(a){
+ const dt=a.inicio?new Date(a.inicio):null;
+ const estado=String(a.estado||"pendiente").toLowerCase();
+ return {id:a.id,company:a.empresa_id,client:a.nombre_cliente||a.nombre||"Cliente",phone:a.telefono||"",service:a.operacion||a.servicio||"",origin:a.origen||"",date:dt?dt.toLocaleDateString("sv-SE",{timeZone:"Europe/Madrid"}):"",time:dt?dt.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",hour12:false,timeZone:"Europe/Madrid"}):"",status:estado==="confirmada"?"Confirmada":estado==="cancelada"?"Cancelada":"Pendiente",event:a.event_id||"",note:a.notas||""};
+}
+async function postMotor(payload){
+ const r=await fetch(MOTOR_WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+ if(!r.ok) throw new Error("Motor Make HTTP "+r.status);
+ return r;
+}
+async function loginReal(e){
+ e.preventDefault(); document.getElementById("authError").style.display="none"; document.getElementById("loginBtn").disabled=true; document.getElementById("loginBtn").textContent="Entrando...";
+ const {data,error}=await sb.auth.signInWithPassword({email:document.getElementById("loginEmail").value.trim(),password:document.getElementById("loginPassword").value});
+ document.getElementById("loginBtn").disabled=false; document.getElementById("loginBtn").textContent="Entrar";
+ if(error){document.getElementById("authError").textContent=error.message;document.getElementById("authError").style.display="block";return}
+ await bootReal(data.session);
+}
+async function logoutReal(){await sb.auth.signOut();location.reload()}
+async function bootReal(session){
+ if(!session){document.getElementById("authScreen").style.display="grid";document.getElementById("mainApp").style.display="none";return}
+ authUser=session.user;
+ let {data:profile}=await sb.from("profiles").select("*").eq("id",authUser.id).maybeSingle();
+ authProfile=profile||{is_superadmin:false};
+ const {data:mem}=await sb.from("usuarios_empresa").select("empresa_id,rol,activo").eq("activo",true);
+ memberships=mem||[];
+ const chip=document.getElementById("currentUserChip"); if(chip) chip.textContent=(authProfile.is_superadmin?"SUPERADMIN · ":"USUARIO · ")+(authUser.email||"");
+ const pb=document.querySelector(".profile b"); if(pb) pb.textContent=authProfile.is_superadmin?"Modo Superadmin":"Usuario empresa";
+ const ps=document.querySelector(".profile small"); if(ps) ps.textContent=authUser.email||"";
+ const cb=document.querySelector('[data-view="companies"]'); if(cb) cb.style.display=authProfile.is_superadmin?"flex":"none";
+ const nct=document.getElementById("newCompanyTop"); if(nct) nct.style.display=authProfile.is_superadmin?"inline-block":"none";
+ document.getElementById("authScreen").style.display="none";document.getElementById("mainApp").style.display="grid";
+ await refreshRealData();
+ show("home");
+}
+async function refreshRealData(){
+ const [ce,ca,cm]=await Promise.all([
+   sb.from("empresas").select("*").order("created_at",{ascending:true}),
+   sb.from("citas").select("*").order("inicio",{ascending:true}),
+   sb.from("motor_config_empresa").select("*")
+ ]);
+ if(ce.error) throw ce.error;
+ if(cm.error) console.warn(cm.error);
+ motorConfigs=cm.data||[];
+ let companies=(ce.data||[]);
+ if(!authProfile?.is_superadmin){
+   const ids=new Set(memberships.map(m=>m.empresa_id));
+   companies=companies.filter(c=>ids.has(c.id));
+ }
+ state.companies=companies.map(companyFromDb);
+ let appts=(ca.data||[]);
+ if(!authProfile?.is_superadmin){
+   const ids=new Set(state.companies.map(c=>c.id));
+   appts=appts.filter(a=>ids.has(a.empresa_id));
+ }
+ state.appointments=appts.map(appointmentFromDb);
+ renderAll();
+}
+function openCompany(){
+ if(!authProfile?.is_superadmin){alert("Solo el superadministrador puede dar de alta empresas.");return}
+ companyForm.reset();coId.value="";coDuration.value="30";coTimezone.value="Europe/Madrid";coProvince.value="Ourense";coMunicipality.value="Ourense";companyModalTitle.textContent="Nueva empresa";openModal("companyModal");
+}
+function editCompany(id){
+ const c=state.companies.find(x=>x.id===id); if(!c)return;
+ const mc=motorConfigs.find(m=>m.empresa_id===id);
+ coId.value=c.id;coName.value=c.name;coSector.value=normSector(mc?.sector||c.sector);coEmail.value=c.email||"";coWhatsapp.value=c.whatsapp||"";coProvince.value=c.province||"";coMunicipality.value=c.municipality||"";
+ coDuration.value=mc?.duracion_cita_min||30;coTimezone.value=mc?.zona_horaria||"Europe/Madrid";
+ coServices.value=Array.isArray(mc?.servicios)?mc.servicios.map(x=>x.nombre||x).join(", "):"";
+ coNotes.value=mc?.reglas_ia||"";
+ companyModalTitle.textContent="Configurar empresa";openModal("companyModal");
+}
+async function saveCompany(e){
+ e.preventDefault();
+ if(!authProfile?.is_superadmin){alert("Solo el superadministrador puede crear o modificar empresas.");return}
+ saveCompanyBtn.disabled=true;saveCompanyBtn.textContent="Preparando...";
+ try{
+   const sector=normSector(coSector.value);
+   let empresaId=coId.value||null;
+   const empresaPayload={nombre:coName.value.trim(),nombre_comercial:coName.value.trim(),sector:sector,email:coEmail.value.trim()||null,whatsapp_numero:coWhatsapp.value.trim()||null,provincia:coProvince.value.trim()||null,municipio:coMunicipality.value.trim()||null,activa:true};
+   if(empresaId){
+     const {error}=await sb.from("empresas").update(empresaPayload).eq("id",empresaId); if(error)throw error;
+   }else{
+     const {data,error}=await sb.from("empresas").insert(empresaPayload).select("id").single(); if(error)throw error; empresaId=data.id;
+   }
+   const cfg={
+     empresa_id:empresaId,sector,zona_horaria:coTimezone.value.trim()||"Europe/Madrid",
+     duracion_cita_min:Number(coDuration.value)||30,n_alternativas:3,derivar_humano:true,
+     tono_ia:"Profesional, cercano y natural",
+     reglas_ia:coNotes.value.trim()||"Pregunta solo lo necesario. No repitas datos. Nunca inventes disponibilidad. Ofrece únicamente huecos verificados. Respeta horarios, festivos y bloqueos. Deriva cuando sea necesario.",
+     servicios:servicesJSON(coServices.value,sector),horarios:defaultSchedule(),festivos:[],campos_cliente:[],activo:true
+   };
+   const existing=motorConfigs.find(m=>m.empresa_id===empresaId);
+   let q;
+   if(existing) q=await sb.from("motor_config_empresa").update(cfg).eq("empresa_id",empresaId);
+   else q=await sb.from("motor_config_empresa").insert({...cfg,integraciones:{}});
+   if(q.error)throw q.error;
+   // Alta automática solo si aún no hay recursos propios
+   const integ=existing?.integraciones||{};
+   if(!existing || !integ.calendar_id || !integ.spreadsheet_id){
+     await postMotor({accion:"ALTA_EMPRESA",empresa_id:empresaId,nombre_empresa:empresaPayload.nombre_comercial,sector,email:empresaPayload.email||"",telefono:empresaPayload.whatsapp_numero||""});
+   }
+   closeModal("companyModal");
+   await refreshRealData();
+   alert("Empresa guardada. El Motor Único ha recibido el alta/configuración.");
+ }catch(err){console.error(err);alert("No se pudo completar el alta: "+err.message)}
+ finally{saveCompanyBtn.disabled=false;saveCompanyBtn.textContent="Guardar y preparar empresa"}
+}
+function renderCompanies(){
+ const q=(companySearch?.value||"").toLowerCase();
+ const arr=state.companies.filter(c=>(c.name+" "+c.sector+" "+c.municipality).toLowerCase().includes(q));
+ companyGrid.innerHTML=arr.map(c=>{
+   const mc=motorConfigs.find(m=>m.empresa_id===c.id), integ=mc?.integraciones||{};
+   const ready=!!(mc&&integ.calendar_id&&integ.spreadsheet_id);
+   return `<div class="card company-card"><div class="company-icon">${escapeHtml(c.name.split(" ").map(x=>x[0]).slice(0,2).join("").toUpperCase())}</div><h3>${escapeHtml(c.name)}</h3><p class="muted">${escapeHtml(c.sector)} · ${escapeHtml(c.municipality||"")}</p><span class="pill ${ready?"ok":"warn"}">${ready?"Motor configurado":"Alta pendiente"}</span><p><button class="btn small" onclick="editCompany('${c.id}')">Configurar</button>${authProfile?.is_superadmin&&!ready?` <button class="btn small primary" onclick="completeCompanySetup('${c.id}')">Completar alta</button>`:""}</p></div>`;
+ }).join("")+(authProfile?.is_superadmin?`<div class="card" style="text-align:center;cursor:pointer" onclick="openCompany()"><h2 style="color:var(--accent)">＋</h2><b>Añadir empresa</b><p class="muted">Alta automática</p></div>`:"");
+}
+async function completeCompanySetup(id){
+ const c=state.companies.find(x=>x.id===id);if(!c)return;
+ try{
+   let mc=motorConfigs.find(m=>m.empresa_id===id);
+   if(!mc){
+     const sector=normSector(c.sector);
+     const {error}=await sb.from("motor_config_empresa").insert({empresa_id:id,sector,zona_horaria:"Europe/Madrid",duracion_cita_min:30,n_alternativas:3,derivar_humano:true,tono_ia:"Profesional, cercano y natural",reglas_ia:"Nunca inventes disponibilidad. Respeta horarios y bloqueos.",servicios:servicesJSON("",sector),horarios:defaultSchedule(),festivos:[],integraciones:{},campos_cliente:[],activo:true});
+     if(error)throw error;
+   }
+   await postMotor({accion:"ALTA_EMPRESA",empresa_id:id,nombre_empresa:c.name,sector:normSector(c.sector),email:c.email||"",telefono:c.whatsapp||""});
+   alert("Alta enviada al Motor Único. Actualiza en unos segundos para comprobar Calendar y Sheet.");
+   setTimeout(refreshRealData,1800);
+ }catch(err){alert("Error al completar el alta: "+err.message)}
+}
+function modifyAppointment(id){
+ const a=state.appointments.find(x=>x.id===id);if(!a)return;
+ modId.value=id;modifyWho.textContent=`${a.client} · ${a.date} ${a.time} · Event-ID: ${a.event||"sin Event-ID"}`;
+ modDate.value=a.date;modTime.value=a.time;modNote.value="";openModal("modifyModal");
+}
+async function applyModification(){
+ const a=state.appointments.find(x=>x.id===modId.value);if(!a)return;
+ if(!a.event){alert("Esta cita no tiene Event-ID de Google Calendar. No puedo modificarla de forma segura.");return}
+ if(!modDate.value||!modTime.value){alert("Indica nueva fecha y hora.");return}
+ const btn=document.querySelector('#modifyModal .btn.primary');btn.disabled=true;btn.textContent="Enviando...";
+ try{
+   const nueva=`${modDate.value} ${modTime.value}`;
+   await postMotor({accion:"MODIFICAR_CITA",empresa_id:a.company,Event_ID:a.event,ID_CITA:a.id,Cita_actual:`${a.date} ${a.time}`,Disponibilidad:nueva,nueva_fecha:modDate.value,nueva_hora:modTime.value,nota:modNote.value||""});
+   closeModal("modifyModal");
+   alert("Modificación enviada al Motor Único. Calendar y registros se actualizarán desde Make.");
+   setTimeout(refreshRealData,1800);
+ }catch(err){alert("No se pudo enviar la modificación: "+err.message)}
+ finally{btn.disabled=false;btn.textContent="Aplicar modificación"}
+}
+async function toggleCompany(id){
+ if(!authProfile?.is_superadmin)return;
+ const c=state.companies.find(x=>x.id===id);if(!c)return;
+ const {error}=await sb.from("empresas").update({activa:!c.active}).eq("id",id);
+ if(error){alert(error.message);return} await refreshRealData();
+}
+async function saveAI(){
+ const companyId=state.companies[0]?.id;
+ if(!companyId){alert("No hay empresa seleccionada.");return}
+ const {error}=await sb.from("motor_config_empresa").update({tono_ia:aiTone.value,reglas_ia:aiRules.value}).eq("empresa_id",companyId);
+ if(error)alert(error.message);else alert("Configuración IA guardada en Supabase.");
+}
+async function saveSchedule(){
+ const companyId=state.companies[0]?.id;if(!companyId)return;
+ const s={};document.querySelectorAll("[data-day]").forEach(el=>{const key=el.dataset.day.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");s[key]=s[key]||["","","",""];s[key][+el.dataset.i]=el.value});
+ Object.keys(s).forEach(k=>s[k]=s[k].filter(Boolean));
+ const {error}=await sb.from("motor_config_empresa").update({horarios:s}).eq("empresa_id",companyId);
+ if(error)alert(error.message);else alert("Horario guardado en Supabase.");
+}
+function changeViewMode(){ /* retirado: el rol real lo determina Supabase */ }
+
+if(sb) sb.auth.getSession().then(({data})=>bootReal(data.session)).catch(err=>{
+ document.getElementById("authError").textContent=err.message;document.getElementById("authError").style.display="block";
+});
+</script>
+
+
+<script>
+window.addEventListener("error",function(e){
+  const box=document.getElementById("authError");
+  if(box && document.getElementById("authScreen")?.style.display!=="none"){
+    box.textContent="Error de interfaz: "+(e.message||"desconocido");
+    box.style.display="block";
+  }
+});
+window.addEventListener("unhandledrejection",function(e){
+  const box=document.getElementById("authError");
+  if(box && document.getElementById("authScreen")?.style.display!=="none"){
+    box.textContent="Error de conexión: "+(e.reason?.message||e.reason||"desconocido");
+    box.style.display="block";
+  }
+});
+</script>
+
+
+<script id="galicia-v4-functional">
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+const sectorDefaults = {
+  inmobiliaria:["Comprar","Vender","Alquilar","Valoración de inmueble"],
+  dental:["Primera consulta","Revisión","Higiene dental","Urgencia"],
+  peluqueria:["Corte","Peinado","Coloración","Mechas","Tratamiento capilar"],
+  fisioterapia:["Valoración inicial","Sesión de fisioterapia","Rehabilitación","Masaje terapéutico"],
+  general:["Consulta","Cita"]
+};
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+function cfgFor(id){return (window.motorConfigs||motorConfigs||[]).find(x=>x.empresa_id===id);}
+function companyFor(id){return state.companies.find(x=>x.id===id);}
+function defaultServices(sector){return (sectorDefaults[normSector(sector)]||sectorDefaults.general).join(", ");}
+
+window.openCompany = function(){
+  if(!authProfile?.is_superadmin){alert("Solo el superadministrador puede dar de alta empresas.");return;}
+  $("companyForm").reset();
+  $("coId").value="";
+  $("coSector").value="inmobiliaria";
+  $("coDuration").value="30";
+  $("coTimezone").value="Europe/Madrid";
+  $("coProvince").value="Ourense";
+  $("coMunicipality").value="Ourense";
+  $("coServices").value=defaultServices("inmobiliaria");
+  $("coNotes").value="Pregunta solo lo necesario. No repitas datos. Nunca inventes disponibilidad. Ofrece únicamente huecos verificados. Respeta horarios, festivos y bloqueos. Deriva cuando sea necesario.";
+  $("companyModalTitle").textContent="Nueva empresa";
+  openModal("companyModal");
+};
+
+window.editCompany = function(id, completing=false){
+  const c=companyFor(id); if(!c)return;
+  const mc=cfgFor(id);
+  const sector=normSector(mc?.sector||c.sector||"general");
+  $("coId").value=c.id;
+  $("coName").value=c.name||"";
+  $("coSector").value=sector;
+  $("coEmail").value=c.email||"";
+  $("coWhatsapp").value=c.whatsapp||"";
+  $("coProvince").value=c.province||"Ourense";
+  $("coMunicipality").value=c.municipality||"Ourense";
+  $("coDuration").value=mc?.duracion_cita_min||30;
+  $("coTimezone").value=mc?.zona_horaria||"Europe/Madrid";
+  const services=Array.isArray(mc?.servicios) ? mc.servicios.map(x=>x?.nombre||x).filter(Boolean).join(", ") : "";
+  $("coServices").value=services||defaultServices(sector);
+  $("coNotes").value=mc?.reglas_ia||"Pregunta solo lo necesario. Nunca inventes disponibilidad. Respeta horarios, festivos y bloqueos.";
+  $("companyModalTitle").textContent=(completing?"Completar alta · ":"Configurar · ")+(c.name||"Empresa");
+  $("saveCompanyBtn").textContent=completing?"Completar alta y preparar empresa":"Guardar configuración";
+  openModal("companyModal");
+};
+
+window.completeCompanySetup = function(id){
+  // IMPORTANT: do not launch Alta blindly. First show the company-specific configuration.
+  window.editCompany(id,true);
+};
+
+const sec=$("coSector");
+if(sec) sec.addEventListener("change",()=>{
+  const services=$("coServices");
+  if(!services)return;
+  const old=services.value.trim().toLowerCase();
+  const known=Object.values(sectorDefaults).flat().map(x=>x.toLowerCase());
+  const looksDefault=!old || ["comprar, vender, alquilar","comprar, vender, alquilar, valoración de inmueble"].includes(old)
+      || known.some(x=>old===x);
+  if(looksDefault || !$("coId").value) services.value=defaultServices(sec.value);
+});
+
+window.renderCompanies = function(){
+  const search=($("companySearch")?.value||"").toLowerCase();
+  const arr=state.companies.filter(c=>(`${c.name} ${c.sector} ${c.municipality||""}`).toLowerCase().includes(search));
+  const grid=$("companyGrid"); if(!grid)return;
+  grid.innerHTML=arr.map(c=>{
+    const mc=cfgFor(c.id), integ=mc?.integraciones||{};
+    const ready=Boolean(mc && integ.calendar_id && integ.spreadsheet_id);
+    const status=ready?"Motor configurado":mc?"Configuración pendiente de recursos":"Alta pendiente";
+    return `<div class="card company-card">
+      <div class="company-icon">${esc((c.name||"?").split(" ").map(x=>x[0]).slice(0,2).join("").toUpperCase())}</div>
+      <h3>${esc(c.name)}</h3><p class="muted">${esc(c.sector)} · ${esc(c.municipality||"")}</p>
+      <span class="pill ${ready?"ok":"warn"}">${esc(status)}</span>
+      <p><button class="btn small" onclick="editCompany('${c.id}')">Configurar</button>
+      ${authProfile?.is_superadmin&&!ready?` <button class="btn small primary" onclick="completeCompanySetup('${c.id}')">Completar alta</button>`:""}</p>
+    </div>`;
+  }).join("")+(authProfile?.is_superadmin?`<div class="card" style="text-align:center;cursor:pointer" onclick="openCompany()"><h2 style="color:var(--accent)">＋</h2><b>Añadir empresa</b><p class="muted">Alta automática</p></div>`:"");
+};
+
+function fillCompanySelect(selected){
+  const sel=$("apCompany"); if(!sel)return;
+  sel.innerHTML=state.companies.filter(c=>c.active!==false).map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
+  if(selected) sel.value=selected;
+}
+window.openAppointment = function(){
+  $("appointmentForm").reset();
+  $("apId").value="";
+  fillCompanySelect(state.companies[0]?.id);
+  $("apOrigin").value="Manual";
+  $("apStatus").value="Pendiente";
+  $("appointmentModalTitle").textContent="Nueva cita";
+  openModal("appointmentModal");
+};
+window.editAppointment = function(id){
+  // Editing date/time must use the safe Modificar flow, not local demo writes.
+  window.modifyAppointment(id);
+};
+window.deleteAppointment = function(){
+  alert("No se borran citas directamente. Usa Modificar/Cancelar para mantener Calendar y el registro sincronizados.");
+};
+window.saveAppointment = async function(e){
+  e.preventDefault();
+  const companyId=$("apCompany")?.value;
+  if(!companyId){alert("Selecciona una empresa.");return;}
+  if(!$("apDate").value||!$("apTime").value){alert("Indica fecha y hora.");return;}
+  const submit=$("appointmentForm").querySelector('button.btn.primary');
+  submit.disabled=true; submit.textContent="Enviando...";
+  try{
+    await postMotor({
+      accion:"SOLICITUD_CLIENTE",
+      empresa_id:companyId,
+      canal:"Interfaz GalicIA",
+      nombre:$("apClient").value.trim(),
+      telefono:$("apPhone").value.trim(),
+      email:$("apEmail").value.trim(),
+      tipo:$("apService").value.trim(),
+      inmueble:"",
+      zona:"",
+      fecha:$("apDate").value,
+      hora:$("apTime").value,
+      mensaje:$("apNote").value.trim()||"Crear cita desde la interfaz"
+    });
+    closeModal("appointmentModal");
+    alert("Solicitud enviada al Motor Único. La disponibilidad la validará Google Calendar antes de confirmar.");
+    setTimeout(()=>refreshRealData().catch(console.error),2000);
+  }catch(err){alert("No se pudo enviar la cita: "+err.message);}
+  finally{submit.disabled=false;submit.textContent="Guardar cita";}
+};
+
+window.tableAppointments = function(arr,compact=false){
+  if(!arr.length)return '<div class="empty">No hay citas.</div>';
+  return `<table><tr><th>Fecha</th><th>Cliente</th><th>Servicio</th><th>Origen</th><th>Estado</th><th></th></tr>${
+    arr.map(a=>`<tr><td>${esc(a.date)} ${esc(a.time)}</td><td>${esc(a.client)}</td><td>${esc(a.service)}</td><td>${esc(a.origin)}</td>
+    <td><span class="pill ${a.status==="Confirmada"?"ok":a.status==="Pendiente"?"warn":"bad"}">${esc(a.status)}</span></td>
+    <td><button class="btn small primary" onclick="modifyAppointment('${a.id}')">Modificar</button></td></tr>`).join("")
+  }</table>`;
+};
+window.renderAppointments = function(){
+  const q=($("appointmentSearch")?.value||"").toLowerCase(), st=$("appointmentStatus")?.value||"";
+  const arr=state.appointments.filter(a=>(`${a.client} ${a.phone} ${a.service}`).toLowerCase().includes(q)&&(!st||a.status===st));
+  const t=$("appointmentTable");if(t)t.innerHTML=window.tableAppointments(arr);
+};
+
+// Do not show demo conversations/attention as if WhatsApp were live.
+window.renderConversations = function(){
+  const tl=$("threadList"), cb=$("chatBody"), ct=$("chatTitle");
+  if(tl)tl.innerHTML='<div class="empty"><b>WhatsApp pendiente de integración</b><br>Se activará al final, después de validar empresas, citas, Calendar y Sheets.</div>';
+  if(cb)cb.innerHTML='<div class="empty">Sin conversaciones reales todavía.</div>';
+  if(ct)ct.textContent="Conversaciones";
+};
+window.renderAttention = function(){
+  const a=$("attentionList"); if(a)a.innerHTML='<div class="empty">Sin cola real de WhatsApp hasta completar esa integración.</div>';
+  const n=$("attentionCount"); if(n)n.textContent="0";
+};
+
+// Hide controls that are still demo-only and would create misleading local changes.
+const resetBtn=[...document.querySelectorAll("button")].find(b=>b.textContent.includes("Restablecer demo"));
+if(resetBtn)resetBtn.style.display="none";
+
+})();
+</script>
+
+
+<script id="galicia-v5-audited">
+(function(){
+"use strict";
+const el=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const configs=()=>window.motorConfigs||((typeof motorConfigs!=="undefined")?motorConfigs:[])||[];
+const getCfg=id=>configs().find(x=>String(x.empresa_id)===String(id));
+const integrations=mc=>{
+ const i=(mc&&mc.integraciones)||{};
+ return {
+  calendar:i.calendar_id||i.calendarID||mc?.calendar_id||mc?.calendarID||"",
+  sheet:i.spreadsheet_id||i.spreadsheetID||mc?.spreadsheet_id||mc?.spreadsheetID||""
+ };
+};
+const configured=mc=>!!(mc&&mc.empresa_id);
+
+function cleanUI(){
+ // Keep exactly one header "+ Nueva empresa"; card "Añadir empresa" remains.
+ const btns=[...document.querySelectorAll("button")].filter(b=>/^\s*\+\s*Nueva empresa\s*$/i.test(b.textContent||""));
+ btns.forEach((b,i)=>b.style.display=i===0?"":"none");
+ [...document.querySelectorAll("select")].forEach(s=>{
+   if(/Vista Superadmin|Vista Empresa/i.test(s.textContent||"")) s.remove();
+ });
+}
+cleanUI();
+
+window.renderCompanies=function(){
+ const grid=el("companyGrid"); if(!grid)return;
+ const q=(el("companySearch")?.value||"").toLowerCase();
+ const arr=(state.companies||[]).filter(c=>(`${c.name||""} ${c.sector||""} ${c.municipality||""}`).toLowerCase().includes(q));
+ grid.innerHTML=arr.map(c=>{
+   const mc=getCfg(c.id), ints=integrations(mc), hasCfg=configured(mc);
+   // Do not call a configured company "Alta pendiente". Resource detail is separate.
+   const status=hasCfg?"Motor configurado":"Alta pendiente";
+   const cls=hasCfg?"ok":"warn";
+   const detail=hasCfg && !(ints.calendar&&ints.sheet)
+      ? `<div class="muted" style="margin-top:7px;font-size:12px">Configuración guardada · recursos pendientes de verificación</div>`:"";
+   return `<div class="card company-card">
+    <div class="company-icon">${esc((c.name||"?").split(" ").map(x=>x[0]).slice(0,2).join("").toUpperCase())}</div>
+    <h3>${esc(c.name)}</h3><p class="muted">${esc(c.sector)} · ${esc(c.municipality||"")}</p>
+    <span class="pill ${cls}">${status}</span>${detail}
+    <p><button class="btn small" onclick="editCompany('${esc(c.id)}')">Configurar</button>
+    ${authProfile?.is_superadmin&&!hasCfg?` <button class="btn small primary" onclick="completeCompanySetup('${esc(c.id)}')">Completar alta</button>`:""}</p>
+   </div>`;
+ }).join("")+(authProfile?.is_superadmin?`<div class="card" style="text-align:center;cursor:pointer" onclick="openCompany()"><h2 style="color:var(--accent)">＋</h2><b>Añadir empresa</b><p class="muted">Alta automática</p></div>`:"");
+ cleanUI();
+};
+
+window.completeCompanySetup=function(id){
+ // Never fire ALTA_EMPRESA merely by clicking the card.
+ // First open the selected company's configuration.
+ window.editCompany(id,true);
+};
+
+// Wrap company save: wait for real Supabase reload, then redraw status.
+// The existing saveCompany remains responsible for DB + Motor.
+const realSaveCompany=window.saveCompany;
+window.saveCompany=async function(e){
+ if(e?.preventDefault)e.preventDefault();
+ const btn=el("saveCompanyBtn");
+ if(btn){btn.disabled=true;btn.dataset.oldText=btn.textContent;btn.textContent="Guardando...";}
+ try{
+   await realSaveCompany(e);
+   await new Promise(r=>setTimeout(r,900));
+   await refreshRealData();
+   window.renderCompanies();
+ }catch(err){
+   console.error(err);
+   alert("No se pudo completar el alta: "+(err?.message||err));
+ }finally{
+   if(btn){btn.disabled=false;btn.textContent=btn.dataset.oldText||"Guardar configuración";}
+ }
+};
+
+// No fake WhatsApp data before final integration.
+window.renderConversations=function(){
+ const l=el("threadList"),b=el("chatBody"),t=el("chatTitle");
+ if(l)l.innerHTML='<div class="empty"><b>WhatsApp pendiente</b><br>Se integrará al final del proyecto.</div>';
+ if(b)b.innerHTML='<div class="empty">Sin conversaciones reales todavía.</div>';
+ if(t)t.textContent="Conversaciones";
+};
+window.renderAttention=function(){
+ const a=el("attentionList"),n=el("attentionCount");
+ if(a)a.innerHTML='<div class="empty">Sin incidencias conversacionales reales hasta integrar WhatsApp.</div>';
+ if(n)n.textContent="0";
+};
+
+// Prevent demo-only destructive/local appointment actions.
+window.deleteAppointment=function(){alert("No se eliminan citas localmente. Usa el flujo de modificación/cancelación para mantener Calendar y Supabase sincronizados.");};
+window.editAppointment=function(id){window.modifyAppointment(id);};
+
+// Make runtime errors visible but non-destructive.
+window.addEventListener("unhandledrejection",e=>console.error("GalicIA async:",e.reason));
+window.addEventListener("error",e=>console.error("GalicIA runtime:",e.message));
+
+const obs=new MutationObserver(cleanUI);
+obs.observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+
+
+<script id="galicia-v6-motor-resources">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const esc2=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+function cfgs(){return window.motorConfigs||((typeof motorConfigs!=="undefined")?motorConfigs:[])||[]}
+function cfg(id){return cfgs().find(x=>String(x.empresa_id)===String(id))}
+function ints(mc){
+ const i=mc?.integraciones||{};
+ return {
+  calendar:i.calendar_id||i.calendarID||mc?.calendar_id||mc?.calendarID||"",
+  sheet:i.spreadsheet_id||i.spreadsheetID||mc?.spreadsheet_id||mc?.spreadsheetID||""
+ };
+}
+function company(id){return (state.companies||[]).find(x=>String(x.id)===String(id))}
+
+window.prepareMotorResources=async function(id,button){
+ const c=company(id), mc=cfg(id);
+ if(!c||!mc){alert("Primero debe existir la configuración de la empresa.");return}
+ const i=ints(mc);
+ if(i.calendar&&i.sheet){alert("Esta empresa ya tiene Calendar y Sheet asociados.");return}
+ if(button){button.disabled=true;button.textContent="Enviando alta...";}
+ try{
+   // Exact payload required by Make's ALTA_EMPRESA router.
+   const payload={
+     accion:"ALTA_EMPRESA",
+     empresa_id:String(c.id),
+     nombre_empresa:String(c.name||""),
+     sector:String(mc.sector||c.sector||"general"),
+     email:String(c.email||""),
+     telefono:String(c.whatsapp||"")
+   };
+   await postMotor(payload);
+   alert("Alta de recursos enviada al Motor Único. No vuelvas a pulsar mientras Make la procesa.");
+   // Do not falsely mark ready. Reload from Supabase and show actual state.
+   await new Promise(r=>setTimeout(r,1800));
+   await refreshRealData();
+   window.renderCompanies();
+ }catch(err){
+   console.error("ALTA_EMPRESA",err);
+   alert("No se pudo enviar ALTA_EMPRESA: "+(err?.message||err));
+ }finally{
+   if(button){button.disabled=false;button.textContent="Preparar motor";}
+ }
+};
+
+window.renderCompanies=function(){
+ const grid=$("companyGrid"); if(!grid)return;
+ const q=($("companySearch")?.value||"").toLowerCase();
+ const arr=(state.companies||[]).filter(c=>(`${c.name||""} ${c.sector||""} ${c.municipality||""}`).toLowerCase().includes(q));
+ grid.innerHTML=arr.map(c=>{
+   const mc=cfg(c.id), i=ints(mc);
+   const hasCfg=!!mc;
+   const ready=!!(hasCfg&&i.calendar&&i.sheet);
+   let label="Alta pendiente", cls="warn", detail="";
+   if(hasCfg&&!ready){label="Motor pendiente";cls="warn";detail='<div class="muted" style="margin-top:7px;font-size:12px">Falta crear o asociar Calendar y Sheet</div>'}
+   if(ready){label="Motor configurado";cls="ok"}
+   return `<div class="card company-card">
+    <div class="company-icon">${esc2((c.name||"?").split(" ").map(x=>x[0]).slice(0,2).join("").toUpperCase())}</div>
+    <h3>${esc2(c.name)}</h3><p class="muted">${esc2(c.sector)} · ${esc2(c.municipality||"")}</p>
+    <span class="pill ${cls}">${label}</span>${detail}
+    <p><button class="btn small" onclick="editCompany('${esc2(c.id)}')">Configurar</button>
+    ${authProfile?.is_superadmin&&!hasCfg?` <button class="btn small primary" onclick="completeCompanySetup('${esc2(c.id)}')">Completar alta</button>`:""}
+    ${authProfile?.is_superadmin&&hasCfg&&!ready?` <button class="btn small primary" onclick="prepareMotorResources('${esc2(c.id)}',this)">Preparar motor</button>`:""}
+    </p>
+   </div>`;
+ }).join("")+(authProfile?.is_superadmin?`<div class="card" style="text-align:center;cursor:pointer" onclick="openCompany()"><h2 style="color:var(--accent)">＋</h2><b>Añadir empresa</b><p class="muted">Alta automática</p></div>`:"");
+ // Keep only one header + Nueva empresa.
+ const bs=[...document.querySelectorAll("button")].filter(b=>/^\s*\+\s*Nueva empresa\s*$/i.test(b.textContent||""));
+ bs.forEach((b,i)=>b.style.display=i===0?"":"none");
+};
+
+// New companies: save config first. Existing configured-but-unprovisioned companies
+// use the explicit Preparar motor button, avoiding ambiguous duplicate provisioning.
+})();
+</script>
+
+
+<script id="galicia-v7-company-context">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const E=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+let selectedCompanyId=localStorage.getItem("galicia_selected_company")||"";
+
+function companies(){return state.companies||[]}
+function selectedCompany(){return companies().find(c=>String(c.id)===String(selectedCompanyId))||null}
+function isSuper(){return !!authProfile?.is_superadmin}
+function apCompanyId(a){return String(a.company||a.empresa_id||"")}
+
+function ensureCompany(){
+ const cs=companies();
+ if(!cs.length){selectedCompanyId="";return}
+ if(!isSuper()){
+   selectedCompanyId=String(cs[0].id);
+ }else if(selectedCompanyId && !cs.some(c=>String(c.id)===String(selectedCompanyId))){
+   selectedCompanyId="";
+ }
+}
+function setCompany(id,openHome=true){
+ selectedCompanyId=String(id||"");
+ if(selectedCompanyId)localStorage.setItem("galicia_selected_company",selectedCompanyId);
+ else localStorage.removeItem("galicia_selected_company");
+ renderContextBar();
+ window.renderCompanies?.();
+ window.renderAppointments?.();
+ if(openHome && selectedCompanyId) show("home");
+}
+window.selectCompany=setCompany;
+
+function renderContextBar(){
+ ensureCompany();
+ let bar=$("companyContextBar");
+ if(!bar){
+   bar=document.createElement("div");
+   bar.id="companyContextBar";
+   bar.style.cssText="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 18px 0;padding:12px 14px;background:#fff;border:1px solid #e6e9f2;border-radius:14px";
+   const main=document.querySelector("main")||document.querySelector(".main")||document.querySelector(".content");
+   const title=document.querySelector("h1");
+   if(title?.parentNode) title.parentNode.insertBefore(bar,title.nextSibling);
+   else if(main) main.prepend(bar);
+ }
+ const cs=companies();
+ if(isSuper()){
+   bar.innerHTML=`<b>Empresa actual:</b>
+    <select id="companyContextSelect" class="btn" style="min-width:240px">
+      <option value="">Todas las empresas</option>
+      ${cs.map(c=>`<option value="${E(c.id)}" ${String(c.id)===selectedCompanyId?"selected":""}>${E(c.name)}</option>`).join("")}
+    </select>
+    <span class="muted">${selectedCompanyId?"Mostrando solo esta empresa":"Vista global del Superadmin"}</span>`;
+   $("companyContextSelect").onchange=e=>setCompany(e.target.value,false);
+ }else{
+   const c=selectedCompany();
+   bar.innerHTML=`<b>Empresa:</b> <span class="pill info">${E(c?.name||"")}</span>`;
+ }
+}
+
+const priorRenderCompanies=window.renderCompanies;
+window.renderCompanies=function(){
+ priorRenderCompanies();
+ const grid=$("companyGrid"); if(!grid)return;
+ [...grid.querySelectorAll(".company-card")].forEach((card,index)=>{
+   const c=companies()[index]; if(!c)return;
+   card.style.cursor="pointer";
+   card.style.outline=String(c.id)===selectedCompanyId?"2px solid var(--accent)":"";
+   card.onclick=e=>{
+     if(e.target.closest("button"))return;
+     setCompany(c.id,true);
+   };
+   const h=card.querySelector("h3");
+   if(h)h.title="Abrir empresa";
+ });
+ renderContextBar();
+};
+
+window.renderAppointments=function(){
+ ensureCompany();
+ const q=($("appointmentSearch")?.value||"").toLowerCase();
+ const st=$("appointmentStatus")?.value||"";
+ let arr=(state.appointments||[]).filter(a=>(`${a.client||""} ${a.phone||""} ${a.service||""}`).toLowerCase().includes(q)&&(!st||a.status===st));
+ if(selectedCompanyId) arr=arr.filter(a=>apCompanyId(a)===String(selectedCompanyId));
+ const t=$("appointmentTable"); if(t)t.innerHTML=window.tableAppointments(arr);
+ const title=$("pageTitle");
+ if(title && document.querySelector('[data-view="appointments"].active')){
+   title.textContent=selectedCompany()?`Citas · ${selectedCompany().name}`:"Citas · Todas las empresas";
+ }
+};
+
+const oldOpenAppointment=window.openAppointment;
+window.openAppointment=function(){
+ oldOpenAppointment();
+ const sel=$("apCompany");
+ if(sel){
+   if(selectedCompanyId)sel.value=selectedCompanyId;
+   sel.disabled=!isSuper();
+ }
+};
+
+const oldShow=window.show;
+window.show=function(id){
+ oldShow(id);
+ renderContextBar();
+ if(id==="appointments")window.renderAppointments();
+};
+
+// Reapply after backend refreshes real Supabase data.
+const oldRefresh=window.refreshRealData;
+if(typeof oldRefresh==="function"){
+ window.refreshRealData=async function(){
+   const r=await oldRefresh();
+   ensureCompany();renderContextBar();
+   return r;
+ };
+}
+setTimeout(()=>{ensureCompany();renderContextBar();window.renderCompanies?.();},500);
+})();
+</script>
+
+
+<script id="galicia-v8-agenda-empresa">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const days=["lunes","martes","miercoles","jueves","viernes","sabado","domingo"];
+const labels={lunes:"Lunes",martes:"Martes",miercoles:"Miércoles",jueves:"Jueves",viernes:"Viernes",sabado:"Sábado",domingo:"Domingo"};
+function currentId(){return localStorage.getItem("galicia_selected_company")||""}
+function cfg(){return (window.motorConfigs||motorConfigs||[]).find(x=>String(x.empresa_id)===String(currentId()))}
+function normalizeHours(h){
+ const d={};
+ days.forEach(k=>{
+   const v=h?.[k];
+   if(Array.isArray(v)) d[k]=v;
+   else d[k]=[];
+ });
+ return d;
+}
+function ensureAgendaPanel(){
+ const view=document.querySelector('[data-view="schedule"]');
+ if(!view)return;
+ let host=document.getElementById("agendaEmpresaV8");
+ if(!host){
+   host=document.createElement("div");host.id="agendaEmpresaV8";
+   view.prepend(host);
+ }
+ const c=state.companies.find(x=>String(x.id)===String(currentId()));
+ const mc=cfg();
+ if(!c){host.innerHTML='<div class="card"><b>Selecciona una empresa</b><p class="muted">Elige una empresa en la barra superior.</p></div>';return}
+ const h=normalizeHours(mc?.horarios||{});
+ const fest=Array.isArray(mc?.festivos)?mc.festivos:[];
+ host.innerHTML=`
+ <div class="card">
+  <h3>Agenda · ${c.name}</h3>
+  <p class="muted">Estos horarios y días bloqueados se guardan en la configuración real de esta empresa.</p>
+  <div style="overflow:auto"><table><tr><th>Día</th><th>Activo</th><th>Desde</th><th>Hasta</th><th>Desde tarde</th><th>Hasta tarde</th></tr>
+  ${days.map(k=>{
+    const a=h[k]||[], on=a.length>0;
+    return `<tr><td><b>${labels[k]}</b></td>
+      <td><input type="checkbox" id="sch_${k}_on" ${on?"checked":""}></td>
+      <td><input type="time" id="sch_${k}_a" value="${a[0]||"09:00"}"></td>
+      <td><input type="time" id="sch_${k}_b" value="${a[1]||"14:00"}"></td>
+      <td><input type="time" id="sch_${k}_c" value="${a[2]||""}"></td>
+      <td><input type="time" id="sch_${k}_d" value="${a[3]||""}"></td></tr>`;
+  }).join("")}</table></div>
+  <p><button class="btn primary" onclick="saveCompanyHoursV8()">Guardar horario semanal</button></p>
+ </div>
+ <div class="card">
+  <h3>Festivos y días bloqueados</h3>
+  <p class="muted">Bloquear un día evita que el Motor lo trate como día disponible. Puedes volver a autorizarlo eliminándolo.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><input type="date" id="blockDateV8"><input id="blockReasonV8" placeholder="Motivo (opcional)"><button class="btn primary" onclick="blockDateV8()">Bloquear día</button></div>
+  <div id="blockedDatesV8" style="margin-top:12px">${fest.length?fest.map((x,i)=>{
+    const date=typeof x==="string"?x:(x.fecha||x.date||"");
+    const reason=typeof x==="object"?(x.motivo||x.reason||""):"";
+    return `<span class="pill warn" style="margin:4px">${date}${reason?" · "+reason:""} <button class="btn small" onclick="unblockDateV8(${i})">Autorizar</button></span>`;
+  }).join(""):'<span class="muted">No hay días bloqueados.</span>'}</div>
+ </div>
+ <div class="card">
+   <h3>Reprogramación por imprevisto</h3>
+   <p class="muted">Selecciona un día para ver sus citas. La reprogramación individual usa el botón Modificar. La reprogramación colectiva requiere todavía el flujo de notificación/enlace de reserva del Motor; no se ejecutará de forma ficticia desde la interfaz.</p>
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><input type="date" id="incidentDateV8"><button class="btn" onclick="showDayAppointmentsV8()">Ver citas del día</button></div>
+   <div id="incidentListV8" style="margin-top:12px"></div>
+ </div>`;
+}
+async function saveCfgField(field,value){
+ const id=currentId(); if(!id)throw new Error("No hay empresa seleccionada");
+ const {error}=await sb.from("motor_config_empresa").update({[field]:value}).eq("empresa_id",id);
+ if(error)throw error;
+ await refreshRealData();
+ ensureAgendaPanel();
+}
+window.saveCompanyHoursV8=async function(){
+ try{
+   const h={};
+   days.forEach(k=>{
+     if(!$("sch_"+k+"_on").checked){h[k]=[];return}
+     const vals=[$("sch_"+k+"_a").value,$("sch_"+k+"_b").value,$("sch_"+k+"_c").value,$("sch_"+k+"_d").value].filter(Boolean);
+     if(vals.length<2)throw new Error(labels[k]+": indica al menos inicio y fin.");
+     h[k]=vals;
+   });
+   await saveCfgField("horarios",h); alert("Horario semanal guardado.");
+ }catch(e){alert("No se pudo guardar el horario: "+e.message)}
+};
+window.blockDateV8=async function(){
+ const d=$("blockDateV8").value;if(!d){alert("Selecciona una fecha.");return}
+ try{
+   const mc=cfg(), arr=Array.isArray(mc?.festivos)?[...mc.festivos]:[];
+   if(arr.some(x=>(typeof x==="string"?x:(x.fecha||x.date))===d)){alert("Ese día ya está bloqueado.");return}
+   arr.push({fecha:d,motivo:$("blockReasonV8").value.trim()});
+   await saveCfgField("festivos",arr);alert("Día bloqueado.");
+ }catch(e){alert("No se pudo bloquear: "+e.message)}
+};
+window.unblockDateV8=async function(i){
+ try{
+   const arr=Array.isArray(cfg()?.festivos)?[...cfg().festivos]:[];
+   arr.splice(i,1);await saveCfgField("festivos",arr);alert("Día autorizado de nuevo.");
+ }catch(e){alert("No se pudo autorizar: "+e.message)}
+};
+window.showDayAppointmentsV8=function(){
+ const d=$("incidentDateV8").value, host=$("incidentListV8");if(!d){alert("Selecciona una fecha.");return}
+ const id=currentId();
+ const arr=(state.appointments||[]).filter(a=>String(a.company||a.empresa_id||"")===String(id)&&a.date===d);
+ host.innerHTML=arr.length?`<table><tr><th>Hora</th><th>Cliente</th><th>Servicio</th><th></th></tr>${arr.map(a=>`<tr><td>${a.time||""}</td><td>${a.client||""}</td><td>${a.service||""}</td><td><button class="btn small primary" onclick="modifyAppointment('${a.id}')">Modificar</button></td></tr>`).join("")}</table>`:'<div class="empty">No hay citas cargadas para ese día.</div>';
+};
+
+const oldShow=window.show;
+window.show=function(id){oldShow(id);if(id==="schedule")ensureAgendaPanel()};
+const oldSelect=window.selectCompany;
+window.selectCompany=function(id,home=true){oldSelect(id,home);setTimeout(ensureAgendaPanel,0)};
+setTimeout(ensureAgendaPanel,700);
+})();
+</script>
+
+
+<script id="galicia-v9-1-classic-layout">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+function isSuper(){return !!authProfile?.is_superadmin}
+function cs(){return state.companies||[]}
+function sid(){return localStorage.getItem("galicia_selected_company")||""}
+function selected(){return cs().find(c=>String(c.id)===String(sid()))||null}
+
+// Keep the original V8 visual layout. No large Superadmin dashboard card is injected.
+function applyRoles(){
+ const companiesNav=document.querySelector('[data-view="companies"]');
+ if(companiesNav)companiesNav.style.display=isSuper()?"flex":"none";
+ [...document.querySelectorAll("button")].filter(b=>/Nueva empresa/i.test(b.textContent||"")).forEach(b=>b.style.display=isSuper()?"":"none");
+
+ // Superadmin: global context is valid; never force Inmobiliaria as reference.
+ if(isSuper()){
+   if(!sessionStorage.getItem("galicia_classic_context")){
+     localStorage.removeItem("galicia_selected_company");
+     sessionStorage.setItem("galicia_classic_context","1");
+   }
+ }else if(!sid()&&cs()[0]?.id){
+   localStorage.setItem("galicia_selected_company",String(cs()[0].id));
+ }
+}
+
+// Correct appointment scoping while preserving V8/V7 table design.
+window.renderAppointments=function(){
+ const q=($("appointmentSearch")?.value||"").toLowerCase(),st=$("appointmentStatus")?.value||"";
+ let arr=(state.appointments||[]).filter(a=>(`${a.client||""} ${a.phone||""} ${a.service||""}`).toLowerCase().includes(q)&&(!st||a.status===st));
+ const id=sid();
+ if(id) arr=arr.filter(a=>String(a.company||a.empresa_id||"")===String(id));
+ else if(!isSuper()&&cs()[0]?.id) arr=arr.filter(a=>String(a.company||a.empresa_id||"")===String(cs()[0].id));
+ const t=$("appointmentTable");if(t)t.innerHTML=window.tableAppointments(arr);
+};
+
+// WhatsApp readiness stays inside Integraciones only, matching the old layout.
+function whatsappPanel(){
+ const view=document.getElementById('integrations');if(!view)return;
+ let p=$("whatsappReadyClassic");if(!p){p=document.createElement("div");p.id="whatsappReadyClassic";view.prepend(p)}
+ const c=isSuper()?selected():(selected()||cs()[0]);
+ if(!c){p.innerHTML='<div class="card"><h3>WhatsApp + IA</h3><p class="muted">Selecciona una empresa para ver su preparación.</p></div>';return}
+ const mc=(window.motorConfigs||motorConfigs||[]).find(x=>String(x.empresa_id)===String(c.id)),i=mc?.integraciones||{};
+ p.innerHTML=`<div class="card"><h3>WhatsApp + IA · ${c.name}</h3><span class="pill warn">Pendiente de integración final</span>
+ <p class="muted">Preparado para conversación natural, disponibilidad, reserva, reprogramación, cancelación, horarios y derivación a persona. Calendar seguirá validando los huecos.</p>
+ <p class="muted">Calendar: ${i.calendar_id?"asociado":"pendiente"} · Sheet: ${i.spreadsheet_id?"asociado":"pendiente"}</p></div>`;
+}
+
+const oldShow=window.show;
+window.show=function(id){oldShow(id);applyRoles();if(id==="integrations")whatsappPanel();if(id==="appointments")window.renderAppointments()};
+const oldSelect=window.selectCompany;
+window.selectCompany=function(id,home=true){oldSelect(id,home);applyRoles();whatsappPanel();};
+
+setTimeout(()=>{applyRoles();window.renderAppointments?.();},800);
+})();
+</script>
+
+
+<script id="galicia-v10-superadmin-hierarchy">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const PLATFORM="GalicIA Soluciones Empresariales";
+function superadmin(){return !!authProfile?.is_superadmin}
+function companies(){return state.companies||[]}
+function selectedId(){return localStorage.getItem("galicia_selected_company")||""}
+function selected(){return companies().find(c=>String(c.id)===String(selectedId()))||null}
+
+function setCtx(id){
+ if(!superadmin()) return;
+ if(id)localStorage.setItem("galicia_selected_company",String(id));
+ else localStorage.removeItem("galicia_selected_company");
+ renderPlatformHeader();
+ window.renderCompanies?.();
+ window.renderAppointments?.();
+}
+window.setGaliciaCompanyContext=setCtx;
+
+function renderPlatformHeader(){
+ let host=$("galiciaPlatformHeaderV10");
+ if(!host){
+   host=document.createElement("div");
+   host.id="galiciaPlatformHeaderV10";
+   host.style.cssText="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 14px 0";
+   const h=document.querySelector("h1");
+   if(h?.parentNode)h.parentNode.insertBefore(host,h);
+ }
+ if(superadmin()){
+   const id=selectedId();
+   host.innerHTML=`
+     <span class="pill info"><b>${PLATFORM}</b> · Superadmin</span>
+     <select id="galiciaTenantSelectV10" class="btn" style="min-width:230px">
+       <option value="">Todas las empresas</option>
+       ${companies().map(c=>`<option value="${esc(c.id)}" ${String(c.id)===String(id)?"selected":""}>${esc(c.name)}</option>`).join("")}
+     </select>`;
+   $("galiciaTenantSelectV10").onchange=e=>setCtx(e.target.value);
+ }else{
+   const c=selected()||companies()[0];
+   host.innerHTML=`<span class="pill info"><b>${esc(c?.name||"Empresa")}</b> · Cuenta empresa</span>`;
+ }
+}
+
+function enforceHierarchy(){
+ const nav=document.querySelector('[data-view="companies"]');
+ if(nav)nav.style.display=superadmin()?"flex":"none";
+ [...document.querySelectorAll("button")].filter(b=>/Nueva empresa/i.test(b.textContent||"")).forEach(b=>b.style.display=superadmin()?"":"none");
+ if(!superadmin() && !selectedId() && companies()[0]?.id){
+   localStorage.setItem("galicia_selected_company",String(companies()[0].id));
+ }
+ renderPlatformHeader();
+}
+
+// V10 never creates PLATFORM as a tenant. New-company flow remains exclusively client companies.
+const originalSaveCompany=window.saveCompany;
+window.saveCompany=async function(e){
+ const name=($("coName")?.value||"").trim().toLowerCase();
+ if(name==="galicia soluciones empresariales"){
+   e?.preventDefault?.();
+   alert("GalicIA Soluciones Empresariales es la plataforma Superadmin y no se crea como empresa cliente.");
+   return;
+ }
+ return originalSaveCompany(e);
+};
+
+const oldShow=window.show;
+window.show=function(id){oldShow(id);enforceHierarchy()};
+const oldSelect=window.selectCompany;
+window.selectCompany=function(id,home=true){
+ if(!superadmin()) return;
+ oldSelect(id,home);renderPlatformHeader();
+};
+
+setTimeout(()=>{
+ if(superadmin() && !sessionStorage.getItem("galicia_v10_started")){
+   localStorage.removeItem("galicia_selected_company");
+   sessionStorage.setItem("galicia_v10_started","1");
+ }
+ enforceHierarchy();
+},900);
+})();
+</script>
+
+
+<script id="galicia-v10-1-preview-company">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const PREVIEW_KEY="galicia_preview_company";
+function isSuper(){return !!authProfile?.is_superadmin}
+function previewId(){return sessionStorage.getItem(PREVIEW_KEY)||""}
+function selectedId(){return localStorage.getItem("galicia_selected_company")||""}
+function companies(){return state.companies||[]}
+function company(id){return companies().find(c=>String(c.id)===String(id))||null}
+function inPreview(){return isSuper()&&!!previewId()}
+
+window.enterCompanyPreview=function(id){
+ if(!isSuper())return;
+ const c=company(id);if(!c)return alert("No se encontró la empresa.");
+ localStorage.setItem("galicia_selected_company",String(id));
+ sessionStorage.setItem(PREVIEW_KEY,String(id));
+ applyPreview();
+ show("home");
+};
+window.exitCompanyPreview=function(){
+ sessionStorage.removeItem(PREVIEW_KEY);
+ applyPreview();
+ show("companies");
+};
+
+function ensureBanner(){
+ let b=$("companyPreviewBannerV101");
+ if(!b){
+   b=document.createElement("div"); b.id="companyPreviewBannerV101";
+   b.style.cssText="display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 14px;padding:10px 14px;border:1px solid #f0c36d;border-radius:12px;background:#fff8e7";
+   const h=document.querySelector("h1");
+   if(h?.parentNode)h.parentNode.insertBefore(b,h);
+ }
+ return b;
+}
+function applyPreview(){
+ const b=ensureBanner(), id=previewId(), c=company(id);
+ const companyNav=document.querySelector('[data-view="companies"]');
+ const platformHeader=$("galiciaPlatformHeaderV10");
+ const contextBar=$("companyContextBar");
+
+ if(inPreview()&&c){
+   b.style.display="flex";
+   b.innerHTML=`<div><b>Vista previa como empresa:</b> ${esc(c.name)}
+      <span class="muted"> · estás comprobando exactamente la vista operativa del cliente</span></div>
+      <button class="btn small primary" onclick="exitCompanyPreview()">← Volver a Superadmin</button>`;
+   if(companyNav)companyNav.style.display="none";
+   if(platformHeader)platformHeader.style.display="none";
+   if(contextBar)contextBar.style.display="none";
+   [...document.querySelectorAll("button")].filter(x=>/Nueva empresa|Añadir empresa|Completar alta|Preparar motor/i.test(x.textContent||"")).forEach(x=>x.style.display="none");
+ }else{
+   b.style.display="none";
+   if(platformHeader)platformHeader.style.display="";
+   if(contextBar)contextBar.style.display="";
+   if(companyNav)companyNav.style.display=isSuper()?"flex":"none";
+ }
+}
+
+// Add explicit Admin / Preview actions to each company card.
+const previousRenderCompanies=window.renderCompanies;
+window.renderCompanies=function(){
+ previousRenderCompanies();
+ const grid=$("companyGrid");if(!grid)return;
+ const cards=[...grid.querySelectorAll(".company-card")];
+ cards.forEach((card,index)=>{
+   const c=companies()[index];if(!c||!isSuper())return;
+   let row=card.querySelector(".v101-actions");
+   if(!row){
+     row=document.createElement("div");row.className="v101-actions";
+     row.style.cssText="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px";
+     row.innerHTML=`<button class="btn small" type="button">Administrar</button>
+                    <button class="btn small primary" type="button">Ver como empresa</button>`;
+     const buttons=row.querySelectorAll("button");
+     buttons[0].onclick=e=>{e.stopPropagation();sessionStorage.removeItem(PREVIEW_KEY);window.selectCompany(c.id,true);applyPreview()};
+     buttons[1].onclick=e=>{e.stopPropagation();window.enterCompanyPreview(c.id)};
+     card.appendChild(row);
+   }
+ });
+ applyPreview();
+};
+
+// While previewing, company selector/context cannot jump to another tenant.
+const priorSelect=window.selectCompany;
+window.selectCompany=function(id,home=true){
+ if(inPreview() && String(id)!==String(previewId())) return;
+ return priorSelect(id,home);
+};
+
+// Fix configuration writes so they use selected company, never state.companies[0].
+window.saveAI=async function(){
+ const id=selectedId() || (!isSuper()?companies()[0]?.id:"");
+ if(!id){alert("Selecciona una empresa.");return}
+ const {error}=await sb.from("motor_config_empresa").update({
+   tono_ia:$("aiTone")?.value||"",
+   reglas_ia:$("aiRules")?.value||""
+ }).eq("empresa_id",id);
+ if(error)alert(error.message);else alert("Configuración IA guardada para esta empresa.");
+};
+window.saveSchedule=async function(){
+ const id=selectedId() || (!isSuper()?companies()[0]?.id:"");
+ if(!id){alert("Selecciona una empresa.");return}
+ const s={};
+ document.querySelectorAll("[data-day]").forEach(el=>{
+   const key=el.dataset.day.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+   s[key]=s[key]||["","","",""];s[key][+el.dataset.i]=el.value
+ });
+ Object.keys(s).forEach(k=>s[k]=s[k].filter(Boolean));
+ const {error}=await sb.from("motor_config_empresa").update({horarios:s}).eq("empresa_id",id);
+ if(error)alert(error.message);else alert("Horario guardado para esta empresa.");
+};
+
+// Reapply after navigation/data refresh without changing the classic visual design.
+const oldShow=window.show;
+window.show=function(id){
+ if(inPreview()&&id==="companies")id="home";
+ oldShow(id);setTimeout(applyPreview,0);
+};
+const oldRefresh=window.refreshRealData;
+if(typeof oldRefresh==="function"){
+ window.refreshRealData=async function(){const r=await oldRefresh();applyPreview();return r};
+}
+setTimeout(()=>{window.renderCompanies?.();applyPreview()},1000);
+})();
+</script>
+
+
+<script id="galicia-v10-2-selector-fix">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+function superadmin(){return !!authProfile?.is_superadmin}
+function companies(){return state.companies||[]}
+function current(){return localStorage.getItem("galicia_selected_company")||""}
+
+function syncRealContext(id){
+ id=String(id||"");
+ // The original V7 selector owns the internal selectedCompanyId variable.
+ // Drive that real selector so every existing view receives the same context.
+ const legacy=$("companyContextSelect");
+ if(legacy){
+   legacy.value=id;
+   legacy.dispatchEvent(new Event("change",{bubbles:true}));
+ }else{
+   if(id)localStorage.setItem("galicia_selected_company",id);
+   else localStorage.removeItem("galicia_selected_company");
+   window.renderAppointments?.();
+   window.renderCompanies?.();
+ }
+ setTimeout(()=>{renderTopSelector();hideDuplicateSelector();},0);
+}
+window.setGaliciaCompanyContext=syncRealContext;
+
+function renderTopSelector(){
+ if(!superadmin())return;
+ let host=$("galiciaPlatformHeaderV10");
+ if(!host)return;
+ const id=current();
+ host.style.display="";
+ host.innerHTML=`
+   <span class="pill info"><b>GalicIA Soluciones Empresariales</b> · Superadmin</span>
+   <select id="galiciaTenantSelectV102" class="btn" style="min-width:230px">
+     <option value="">Todas las empresas</option>
+     ${companies().map(c=>`<option value="${esc(c.id)}" ${String(c.id)===String(id)?"selected":""}>${esc(c.name)}</option>`).join("")}
+   </select>`;
+ $("galiciaTenantSelectV102").onchange=e=>syncRealContext(e.target.value);
+}
+
+function hideDuplicateSelector(){
+ const bar=$("companyContextBar");
+ if(bar)bar.style.display="none";
+}
+
+// Keep the top selector authoritative after navigation and rerenders.
+document.addEventListener("change",e=>{
+ if(e.target?.id==="companyContextSelect"){
+   setTimeout(renderTopSelector,0);
+ }
+});
+const previousShow=window.show;
+window.show=function(id){
+ previousShow(id);
+ setTimeout(()=>{renderTopSelector();hideDuplicateSelector();},0);
+};
+const previousRenderCompanies=window.renderCompanies;
+window.renderCompanies=function(){
+ previousRenderCompanies();
+ setTimeout(()=>{renderTopSelector();hideDuplicateSelector();},0);
+};
+
+setTimeout(()=>{
+ renderTopSelector();
+ hideDuplicateSelector();
+ // On load, synchronize the hidden original selector with the persisted top context.
+ const legacy=$("companyContextSelect");
+ if(legacy){
+   legacy.value=current();
+   legacy.dispatchEvent(new Event("change",{bubbles:true}));
+ }
+},1200);
+})();
+</script>
+
+
+<script id="galicia-realestate-ai-v11">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id), esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+let properties=[],demands=[],matches=[],alerts=[],activeTab="catalog";
+function companyId(){return localStorage.getItem("galicia_selected_company")||""}
+function requireCompany(){const id=companyId();if(!id||!state.companies.some(c=>String(c.id)===String(id))){alert("Selecciona una empresa válida en la parte superior.");return ""}return id}
+window.openCompanySheet=function(){const id=requireCompany();if(!id)return;const cfg=(window.motorConfigs||motorConfigs||[]).find(x=>String(x.empresa_id)===String(id));let integ=cfg?.integraciones||{};if(typeof integ==="string"){try{integ=JSON.parse(integ)}catch(e){integ={}}}const spreadsheetId=integ.spreadsheet_id;if(!spreadsheetId){alert("Esta empresa todavía no tiene spreadsheet_id configurado en motor_config_empresa > integraciones.");return}window.open(`https://docs.google.com/spreadsheets/d/${encodeURIComponent(spreadsheetId)}/edit`,"_blank","noopener,noreferrer")}
+window.propertyTab=function(tab){activeTab=tab;["catalog","demand","matches","assistant"].forEach(x=>{$("property"+x[0].toUpperCase()+x.slice(1)+"Panel").style.display=x===tab?"block":"none"});document.querySelectorAll("[data-property-tab]").forEach(b=>b.classList.toggle("active",b.dataset.propertyTab===tab))}
+window.openPropertyAI=function(){if(!requireCompany())return;document.querySelector("#propertyAIModal form").reset();$("propTown").value="Ourense";$("propRooms").value=3;$("propBaths").value=2;openModal("propertyAIModal")}
+window.openDemandAI=function(){if(!requireCompany())return;document.querySelector("#demandAIModal form").reset();$("demRooms").value=2;openModal("demandAIModal")}
+async function postAI(payload){
+ const {data,error}=await sb.rpc("galicia_calcular_coincidencias",{p_empresa_id:payload.empresa_id});
+ if(error){console.error("Coincidencias",error.message);return false}return data?.ok===true;
+}
+window.savePropertyAI=async function(e){e.preventDefault();const empresa_id=requireCompany();if(!empresa_id)return;const row={empresa_id,referencia:$("propRef").value.trim(),operacion:$("propOperation").value,tipo:$("propType").value,precio:+$("propPrice").value,zona:$("propZone").value.trim(),municipio:$("propTown").value.trim(),habitaciones:+$("propRooms").value,banos:+$("propBaths").value,superficie_m2:+$("propArea").value||null,caracteristicas:$("propFeatures").value.split(",").map(x=>x.trim()).filter(Boolean),descripcion:$("propDescription").value.trim(),estado:$("propStatus").value,publicado:$("propStatus").value==="activo"};const {data,error}=await sb.from("inmuebles").insert(row).select("*").single();if(error){alert(error.message);return}closeModal("propertyAIModal");const calculated=await postAI({accion:"NUEVO_INMUEBLE",empresa_id,inmueble_id:data.id});await refreshPropertyAI();alert(calculated?"Inmueble guardado y coincidencias calculadas. No se han enviado avisos.":"Inmueble guardado. El cálculo de coincidencias falló; puedes reintentarlo con Calcular matching.")}
+window.saveDemandAI=async function(e){e.preventDefault();const empresa_id=requireCompany();if(!empresa_id)return;const row={empresa_id,nombre_cliente:$("demName").value.trim(),telefono:$("demPhone").value.trim(),operacion:$("demOperation").value,presupuesto_max:+$("demBudget").value||null,zonas:$("demZones").value.split(",").map(x=>x.trim()).filter(Boolean),habitaciones_min:+$("demRooms").value||0,notas:$("demNotes").value.trim(),consentimiento_whatsapp:$("demConsent").checked,consentimiento_at:$("demConsent").checked?new Date().toISOString():null,estado:"activa",origen:"interfaz"};const {data,error}=await sb.from("preferencias_clientes").insert(row).select("*").single();if(error){alert(error.message);return}closeModal("demandAIModal");await postAI({accion:"ACTUALIZAR_PREFERENCIAS",empresa_id,preferencia_id:data.id});await refreshPropertyAI()}
+function score(p,d){
+ const norm=v=>String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase();
+ if(p.operacion!==d.operacion||p.estado!=="activo"||!p.publicado)return 0;
+ if(d.presupuesto_max&&(!Number.isFinite(Number(p.precio))||Number(p.precio)<=0||Number(p.precio)>Number(d.presupuesto_max)))return 0;
+ if(d.habitaciones_min&&(p.habitaciones==null||Number(p.habitaciones)<Number(d.habitaciones_min)))return 0;
+ const zones=(d.zonas||[]).map(norm),place=[norm(p.zona),norm(p.municipio)];
+ if(zones.length&&!zones.some(z=>place.includes(z)))return 0;
+ const features=(p.caracteristicas||[]).map(norm);
+ if(!(d.imprescindibles||[]).map(norm).every(x=>features.includes(x)))return 0;
+ return 100;
+}
+window.runMatchingAI=async function(){
+ const empresa_id=requireCompany();if(!empresa_id)return;
+ const {data,error}=await sb.rpc("galicia_calcular_coincidencias",{p_empresa_id:empresa_id});
+ if(error){alert("No se pudieron calcular coincidencias: "+error.message);return}
+ if(!data?.ok){alert("El servidor no confirmó el cálculo.");return}
+ if(companyId()!==empresa_id)return;
+ await refreshPropertyAI();propertyTab("matches");
+}
+
+window.refreshPropertyAI=async function(){if(!sb)return;const id=companyId();properties=[];demands=[];matches=[];alerts=[];renderPropertyAI();if(!id)return;const [p,d,m,a]=await Promise.all([sb.from("inmuebles").select("*").eq("empresa_id",id).order("created_at",{ascending:false}),sb.from("preferencias_clientes").select("*").eq("empresa_id",id).order("created_at",{ascending:false}),sb.from("v_coincidencias_inmuebles").select("*").eq("empresa_id",id).order("puntuacion",{ascending:false}),sb.from("alertas_inmuebles").select("*").eq("empresa_id",id).order("created_at",{ascending:false})]);if(id!==companyId())return;const failure=[p,d,m,a].find(r=>r.error);if(failure){$("propertyGrid").textContent="No se pudieron cargar los datos: "+failure.error.message;return}properties=p.data||[];demands=d.data||[];matches=m.data||[];alerts=a.data||[];renderPropertyAI()}
+window.renderPropertyCatalog=function(){const q=($("propertySearch")?.value||"").toLowerCase(),arr=properties.filter(p=>(`${p.referencia} ${p.zona} ${p.tipo}`).toLowerCase().includes(q));$("propertyGrid").innerHTML=arr.length?arr.map(p=>`<div class="card property-card"><div class="property-cover">⌂</div><div class="property-body"><div class="section-head"><span class="pill ${p.estado==="activo"?"ok":"neutral"}">${esc(p.estado)}</span><b>${Number(p.precio||0).toLocaleString("es-ES")} €</b></div><h3>${esc(p.tipo)} en ${esc(p.zona)}</h3><p class="muted">${esc(p.referencia)} · ${p.habitaciones||0} hab. · ${p.superficie_m2||"—"} m²</p><p>${esc(p.descripcion||"Ficha pendiente de enriquecimiento por IA.")}</p><button class="btn small" data-reference="${esc(p.referencia)}" onclick="navigator.clipboard.writeText(this.dataset.reference)">Copiar referencia</button></div></div>`).join(""):'<div class="card empty">Aún no hay inmuebles. Pulsa “Publicar inmueble”.</div>'}
+function renderDemands(){$("demandTable").innerHTML=demands.length?`<table><tr><th>Cliente</th><th>Busca</th><th>Zonas</th><th>Presupuesto</th><th>Alertas</th></tr>${demands.map(d=>`<tr><td><b>${esc(d.nombre_cliente)}</b><br><small>${esc(d.telefono)}</small></td><td>${esc(d.operacion)} · ${d.habitaciones_min||0}+ hab.</td><td>${esc((d.zonas||[]).join(", "))}</td><td>${d.presupuesto_max?Number(d.presupuesto_max).toLocaleString("es-ES")+" €":"Flexible"}</td><td><span class="pill ${d.consentimiento_whatsapp?"ok":"warn"}">${d.consentimiento_whatsapp?"Autorizadas":"Sin permiso"}</span></td></tr>`).join("")}</table>`:'<div class="empty">Sin perfiles de búsqueda.</div>'}
+function renderMatches(){$("matchesTable").innerHTML=matches.length?matches.map(m=>`<div class="match-row"><div><b>${esc(m.nombre_cliente)}</b><div class="muted">${esc(m.referencia)} · ${esc(m.tipo)} en ${esc(m.zona)}</div></div><div class="score">${m.puntuacion} puntos</div><span class="pill ${m.puntuacion>=75?"ok":"warn"}">${esc(m.estado)}</span><button class="btn small primary" onclick="queueAlertAI('${m.id}')">Preparar WhatsApp</button></div>`).join(""):'<div class="empty">Pulsa “Calcular matching” para buscar oportunidades.</div>'}
+window.queueAlertAI=async function(matchId){
+ const empresa_id=requireCompany();if(!empresa_id)return;
+ const {data,error}=await sb.rpc("galicia_preparar_alerta",{p_empresa_id:empresa_id,p_coincidencia_id:matchId});
+ if(error){alert("No se pudo preparar el aviso: "+error.message);return}
+ if(!data?.ok){alert("El servidor no confirmó el aviso.");return}
+ if(companyId()===empresa_id)await refreshPropertyAI();
+ alert(data.enviada?"Este aviso ya consta como enviado.":"Estado del aviso: "+data.estado+". Guardarlo no equivale a enviarlo; falta verificar la conexión WhatsApp.");
+}
+
+function renderPropertyAI(){renderPropertyCatalog();renderDemands();renderMatches();$("propKpiActive").textContent=properties.filter(x=>x.estado==="activo").length;$("propKpiLeads").textContent=demands.filter(x=>x.estado==="activa").length;$("propKpiMatches").textContent=matches.filter(x=>x.puntuacion>=75).length;$("propKpiAlerts").textContent=alerts.filter(x=>x.estado==="pendiente").length}
+const titleMap={propertyAI:["Inmuebles IA","Publicación, demanda, matching y alertas inteligentes."]};
+const priorShow=window.show;window.show=function(id){priorShow(id);if(id==="propertyAI"){const t=titleMap[id];$("pageTitle").textContent=t[0];$("pageSub").textContent=t[1];refreshPropertyAI()}}
+setTimeout(()=>{if(document.querySelector('[data-view="propertyAI"].active'))refreshPropertyAI()},1200);
+})();
+</script>
+
+
+<script id="galicia-access-links">
+(function(){
+ const panel=document.createElement("div");panel.className="card";panel.id="companyResources";
+ document.getElementById("integrations").prepend(panel);
+ function refresh(){
+  panel.replaceChildren();const h=document.createElement("h3");h.textContent="Accesos de la empresa";panel.append(h);
+  const id=localStorage.getItem("galicia_selected_company");
+  const c=state.companies.find(x=>String(x.id)===String(id));
+  if(!c){panel.append("Selecciona una empresa para abrir sus recursos.");return}
+  const cfg=motorConfigs.find(x=>String(x.empresa_id)===String(id));let i=cfg?.integraciones||{};
+  if(typeof i==="string"){try{i=JSON.parse(i)}catch{i={}}}
+  const duplicate=motorConfigs.some(x=>{let other=x.integraciones||{};if(typeof other==="string"){try{other=JSON.parse(other)}catch{return false}}return String(x.empresa_id)!==String(id)&&i.calendar_id&&other.calendar_id===i.calendar_id});
+  for(const [name,url] of [["Abrir Sheet",i.spreadsheet_id?"https://docs.google.com/spreadsheets/d/"+encodeURIComponent(i.spreadsheet_id)+"/edit":""],["Abrir Calendar",i.calendar_id?"https://calendar.google.com/calendar/r?authuser=inteligenciaartificialgalicia%40gmail.com&cid="+encodeURIComponent(i.calendar_id):""]]){
+   if(!url)continue;const a=document.createElement("a");a.className="btn";a.textContent=name;a.href=url;a.target="_blank";a.rel="noopener noreferrer";panel.append(a,document.createTextNode(" "));
+  }
+  if(duplicate){const p=document.createElement("p");p.className="pill warn";p.textContent="Revisar agenda: este calendario también está asignado a otra empresa.";panel.append(p)}
+ }
+ const previousShow=window.show;window.show=function(id){previousShow(id);if(id==="integrations")refresh()};
+ const previousSelect=window.selectCompany;window.selectCompany=function(...args){const r=previousSelect(...args);refresh();if(document.getElementById("propertyAI").classList.contains("active"))refreshPropertyAI();return r};
+})();
+</script>
+
+<script id="galicia-control-v17">(function(){
+'use strict';
+const host=document.getElementById('integrations');
+const panel=document.createElement('section');panel.className='card';panel.id='galiciaSetup';host.prepend(panel);
+// Retire the legacy switches: they changed presentation without connecting providers.
+for(const child of host.children)if(child!==panel)child.hidden=true;
+let revision=0;
+const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n};
+const json=v=>typeof v==='string'?JSON.parse(v):v||{};
+const selected=()=>localStorage.getItem('galicia_selected_company')||'';
+const button=(label,fn)=>{const b=el('button',label);b.type='button';b.className='btn';b.onclick=fn;return b};
+const link=(label,url)=>{const a=el('a',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.className='btn';return a};
+function resources(target,i){
+ if(i.spreadsheet_id)target.append(link('Abrir Sheets','https://docs.google.com/spreadsheets/d/'+encodeURIComponent(i.spreadsheet_id)+'/edit'));
+ if(i.calendar_id)target.append(link('Abrir Calendar','https://calendar.google.com/calendar/r?authuser=inteligenciaartificialgalicia%40gmail.com&cid='+encodeURIComponent(i.calendar_id)));
+}
+async function render(){
+ const run=++revision,cid=selected();panel.replaceChildren(el('h2','Centro de gestión'),el('p','Empresas, recursos y configuración desde un mismo lugar.'));
+ panel.setAttribute('aria-busy','true');
+ try{
+ const [permission,configs,companies]=await Promise.all([sb.rpc('es_superadmin'),sb.from('motor_config_empresa').select('*'),sb.from('empresas').select('id,nombre,activa,whatsapp_phone,whatsapp_phone_number_id,whatsapp_enabled,ia_whatsapp_enabled,updated_at')]);
+ if(run!==revision)return;
+ for(const r of [permission,configs,companies])if(r.error)throw r.error;
+ const superadmin=permission.data===true;
+ motorConfigs=configs.data||[];
+ const rows=companies.data||[];
+ const toolbar=el('div');toolbar.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin:16px 0';
+ toolbar.append(button('Actualizar estado',render));
+ if(superadmin)toolbar.append(button('Gestionar empresas',()=>show('companies')),button('Nueva empresa',()=>openCompany()));
+ toolbar.append(button('Actividad',()=>show('logs')));panel.append(toolbar);
+ if(superadmin){
+ panel.append(el('h3','Todas las empresas'));
+ const search=el('input');search.placeholder='Buscar empresa…';search.setAttribute('aria-label','Buscar empresa');panel.append(search);
+ const wrap=el('div');wrap.style.overflowX='auto';const table=el('table');table.style.width='100%';wrap.append(table);panel.append(wrap);
+ const header=el('tr');for(const t of ['Empresa','Recursos asignados','Revisión','Gestión'])header.append(el('th',t));table.append(header);
+ for(const c of rows){const cfg=motorConfigs.find(m=>m.empresa_id===c.id),i=json(cfg?.integraciones);const tr=el('tr');tr.dataset.search=c.nombre.toLowerCase();tr.append(el('td',c.nombre+(c.activa?'':' · Inactiva')));
+ tr.append(el('td',[i.calendar_id?'Calendar':'Sin Calendar',i.spreadsheet_id?'Sheets':'Sin Sheets'].join(' · ')));
+ const duplicate=motorConfigs.some(m=>m.empresa_id!==c.id&&((i.calendar_id&&json(m.integraciones).calendar_id===i.calendar_id)||(i.spreadsheet_id&&json(m.integraciones).spreadsheet_id===i.spreadsheet_id)));
+ tr.append(el('td',duplicate?'Revisar: recurso compartido':!cfg?'Falta configuración':'WhatsApp pendiente de prueba'));
+ const actions=el('td');actions.append(button('Configurar',()=>{window.setGaliciaCompanyContext(c.id);render()}));resources(actions,i);tr.append(actions);table.append(tr);
+ }
+ search.oninput=()=>{for(const r of table.querySelectorAll('tr[data-search]'))r.hidden=!r.dataset.search.includes(search.value.toLowerCase().trim())};
+ if(!rows.length)panel.append(el('p','Todavía no hay empresas accesibles.'));
+ }
+ if(!cid){panel.append(el('p','Selecciona Configurar en una empresa para gestionar sus datos.'));return}
+ const company=rows.find(c=>c.id===cid),cfg=motorConfigs.find(m=>m.empresa_id===cid);
+ if(!company){panel.append(el('p','La empresa seleccionada no está disponible para esta cuenta.'));return}
+ panel.append(el('h3',company.nombre));
+ if(!cfg){panel.append(el('p','Esta empresa no tiene configuración del motor. Completa su alta desde Empresas.'));return}
+ const admin=await sb.rpc('es_admin_empresa',{p_empresa:cid});if(run!==revision)return;if(admin.error)throw admin.error;
+ const editable=superadmin||admin.data===true;let current=cfg,integrations=json(cfg.integraciones);
+ const shortcuts=el('div');shortcuts.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin:16px 0';resources(shortcuts,integrations);
+ for(const [label,view] of [['Asistente IA','ai'],['Horarios y cierres','business'],['Solicitudes y citas','appointments'],['Inmuebles y demanda','propertyAI']])if(document.getElementById(view))shortcuts.append(button(label,()=>show(view)));
+ panel.append(shortcuts,el('p','Los identificadores asignados no verifican permisos de Google. El calendario se abre para gestión interna; no es un selector público de reservas.'));
+ const form=el('form');form.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px';const inputs={};
+ const definitions=[['email_empresa','Correo de contacto','email'],['whatsapp_numero','WhatsApp de contacto (+34…)','tel'],['duracion_cita_min','Duración de cita en minutos','number'],['n_alternativas','Alternativas que buscará el motor','number'],['zona_horaria','Zona horaria','text'],['tono_ia','Tono del asistente','text']];
+ for(const [key,label,type] of definitions){const labelEl=el('label',label),input=el('input');input.type=type;input.style.cssText='display:block;width:100%;margin-top:6px';input.disabled=!editable;input.value=['email_empresa','whatsapp_numero'].includes(key)?integrations[key]||'':cfg[key]??'';if(type==='number'){input.min=1;input.max=key==='n_alternativas'?10:480;input.required=true}if(key==='zona_horaria')input.required=true;inputs[key]=input;labelEl.append(input);form.append(labelEl)}
+ const status=el('p');status.setAttribute('role','status');status.style.gridColumn='1 / -1';const save=button('Guardar configuración',()=>{});save.type='submit';save.disabled=!editable;form.append(status,save);panel.append(form);
+ form.onsubmit=async event=>{event.preventDefault();if(!editable||run!==revision||selected()!==cid)return;save.disabled=true;status.textContent='Guardando…';try{
+ const phone=inputs.whatsapp_numero.value.trim();if(phone&&!/^\+[1-9]\d{7,14}$/.test(phone))throw Error('Teléfono con + y prefijo, sin espacios.');
+ const zone=inputs.zona_horaria.value.trim();new Intl.DateTimeFormat('es',{timeZone:zone}).format();
+ const duration=Number(inputs.duracion_cita_min.value),count=Number(inputs.n_alternativas.value);if(!Number.isInteger(duration)||duration<1||duration>480||!Number.isInteger(count)||count<1||count>10)throw Error('Revisa duración y alternativas.');
+ const patch={integraciones:{...integrations,email_empresa:inputs.email_empresa.value.trim(),whatsapp_numero:phone},duracion_cita_min:duration,n_alternativas:count,zona_horaria:zone,tono_ia:inputs.tono_ia.value.trim()};
+ let q=sb.from('motor_config_empresa').update(patch).eq('empresa_id',cid);q=current.updated_at?q.eq('updated_at',current.updated_at):q.is('updated_at',null);const result=await q.select('*').maybeSingle();if(result.error)throw result.error;if(!result.data)throw Error('Los datos cambiaron o no tienes permiso. Actualiza antes de guardar.');
+ if(run!==revision)return;current=result.data;integrations=json(current.integraciones);motorConfigs=motorConfigs.map(m=>m.empresa_id===cid?current:m);status.textContent='Guardado en Supabase. La activación de canales requiere completar su conexión.';
+ }catch(e){if(run===revision)status.textContent=e.message}finally{if(run===revision)save.disabled=!editable}};
+ const wa=el('div');wa.className='card';wa.append(el('h3','WhatsApp · preparación del canal'),el('p','Número registrado: '+(company.whatsapp_phone||'Pendiente')),el('p','Phone Number ID: '+(company.whatsapp_phone_number_id||'Pendiente')),el('p','Recepción configurada: '+(company.whatsapp_enabled?'Sí':'No')+' · IA marcada: '+(company.ia_whatsapp_enabled?'Sí':'No')),el('p','El envío automático y la respuesta del agente aún no están verificados. Los indicadores anteriores son configuración, no una prueba de funcionamiento.'));panel.append(wa);
+ const pending=el('div');pending.className='card';pending.append(el('h3','Pendientes de integración'),el('p','Selector público con disponibilidad real, alternativas cercanas y botones de confirmación o modificación: requieren el servicio de reservas. WhatsApp se completará después. Guardar un correo o teléfono no conecta por sí solo estas funciones.'));panel.append(pending);
+ }catch(e){if(run===revision)panel.append(el('p','No se pudo cargar el centro: '+e.message),button('Reintentar',render))}finally{if(run===revision)panel.setAttribute('aria-busy','false')}
+}
+const previous=window.show;window.show=function(id){const r=previous.apply(this,arguments);if(id==='integrations')render();return r};
+function contextChanged(){++revision;panel.replaceChildren();if(host.classList.contains('active'))render()}
+const select=window.selectCompany;window.selectCompany=function(){const r=select.apply(this,arguments);contextChanged();return r};
+// The top selector uses a separate legacy handler, not selectCompany.
+document.addEventListener('change',event=>{if(['companyContextSelect','galiciaTenantSelectV10','galiciaTenantSelectV102'].includes(event.target.id))contextChanged()});
+if(sb)sb.auth.onAuthStateChange(event=>{if(event==='SIGNED_OUT'){++revision;panel.replaceChildren();motorConfigs=[];localStorage.removeItem('galicia_selected_company')}});
+})();
+</script>
+
+<script id="galicia-v18-tenant-isolation-superadmin">
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const isSuper=()=>!!window.authProfile?.is_superadmin || !!authProfile?.is_superadmin;
+const companies=()=>state?.companies||[];
+const selectedId=()=>localStorage.getItem('galicia_selected_company')||'';
+const company=id=>companies().find(c=>String(c.id)===String(id))||null;
+const appointmentCompany=a=>String(a?.company||a?.empresa_id||'');
+function tenantId(){
+  const id=selectedId();
+  if(id) return id;
+  if(!isSuper()) return String(companies()[0]?.id||'');
+  return '';
+}
+function scopedAppointments(){
+  const id=tenantId();
+  const all=state?.appointments||[];
+  return id ? all.filter(a=>appointmentCompany(a)===String(id)) : all;
+}
+function companyName(id){return company(id)?.name||'Empresa';}
+
+/* Citas: aislamiento estricto por empresa. En vista global Superadmin se identifica la empresa. */
+window.tableAppointments=function(arr,compact=false){
+  if(!arr?.length)return '<div class="empty">No hay citas para esta empresa.</div>';
+  const global=isSuper()&&!tenantId();
+  return `<table><tr>${global?'<th>Empresa</th>':''}<th>Fecha</th><th>Cliente</th><th>Servicio</th><th>Origen</th><th>Estado</th><th></th></tr>${arr.map(a=>`<tr>${global?`<td><span class="pill info">${esc(companyName(appointmentCompany(a)))}</span></td>`:''}<td>${esc(a.date)} ${esc(a.time)}</td><td>${esc(a.client)}</td><td>${esc(a.service)}</td><td>${esc(a.origin)}</td><td><span class="pill ${a.status==='Confirmada'?'ok':a.status==='Pendiente'?'warn':'bad'}">${esc(a.status)}</span></td><td><button class="btn small primary" onclick="modifyAppointment('${esc(a.id)}')">Modificar</button></td></tr>`).join('')}</table>`;
+};
+window.renderAppointments=function(){
+  const q=($('appointmentSearch')?.value||'').toLowerCase(), st=$('appointmentStatus')?.value||'';
+  let arr=scopedAppointments().filter(a=>(`${a.client||''} ${a.phone||''} ${a.service||''}`).toLowerCase().includes(q)&&(!st||a.status===st));
+  if($('appointmentTable'))$('appointmentTable').innerHTML=window.tableAppointments(arr);
+  const c=company(tenantId());
+  if($('pageTitle')&&$('appointments')?.classList.contains('active')) $('pageTitle').textContent=c?`Citas · ${c.name}`:'Citas · Todas las empresas';
+};
+
+/* Nueva cita: nunca cae por defecto en la primera empresa si Superadmin tiene otra seleccionada. */
+const previousOpenAppointment=window.openAppointment;
+window.openAppointment=function(){
+  previousOpenAppointment?.();
+  const sel=$('apCompany'), id=tenantId(); if(!sel)return;
+  if(id) sel.value=id;
+  sel.disabled=!isSuper();
+};
+
+/* Inicio/KPIs: respetan exactamente el contexto de empresa. */
+window.renderHome=function(){
+  const arr=scopedAppointments().slice().sort((a,b)=>`${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`));
+  if($('homeAppointments')) $('homeAppointments').innerHTML=window.tableAppointments(arr.slice(0,3),true);
+  if($('activityFeed')) $('activityFeed').innerHTML=(state.logs||[]).slice(0,4).map(l=>`<div class="timeline-item"><i class="dot"></i><div><b>${esc(l.text)}</b><div class="muted" style="font-size:11px">${esc(l.time)}</div></div></div>`).join('');
+};
+const oldUpdateKPIs=window.updateKPIs;
+window.updateKPIs=function(){
+  const arr=scopedAppointments();
+  if($('kpiAppointments')) $('kpiAppointments').textContent=arr.filter(a=>a.status!=='Cancelada').length;
+  if($('kpiCompanies')) $('kpiCompanies').textContent=isSuper()&&!tenantId()?companies().filter(c=>c.active!==false).length:(tenantId()?1:0);
+  if($('kpiConversations')) $('kpiConversations').textContent='—';
+  if($('kpiAttention')) $('kpiAttention').textContent='—';
+};
+
+/* Calendario: solo eventos del tenant seleccionado; Superadmin global no mezcla agendas. */
+window.renderCalendar=function(){
+  const id=tenantId();
+  if(isSuper()&&!id){
+    if($('calendarHead'))$('calendarHead').innerHTML='';
+    if($('calendarGrid'))$('calendarGrid').innerHTML='<div class="empty" style="grid-column:1/-1;background:white">Selecciona una empresa arriba para abrir su calendario. Así nunca se mezclan agendas de empresas distintas.</div>';
+    return;
+  }
+  const base=new Date(); base.setHours(12,0,0,0); const day=base.getDay(); base.setDate(base.getDate()-((day+6)%7)+weekOffset*7);
+  const days=[];for(let i=0;i<6;i++){const d=new Date(base);d.setDate(base.getDate()+i);days.push(d)}
+  if($('calendarHead'))$('calendarHead').innerHTML='<div>Hora</div>'+days.map(d=>`<div>${['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][d.getDay()]} ${d.getDate()}</div>`).join('');
+  const times=['09:00','10:00','11:00','12:00','13:00','16:00','17:00','18:00']; const grid=$('calendarGrid');if(!grid)return;grid.innerHTML='';
+  const arr=scopedAppointments();
+  times.forEach(t=>{grid.insertAdjacentHTML('beforeend',`<div class="slot time">${t}</div>`);days.forEach(d=>{const ds=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');const events=arr.filter(a=>a.date===ds&&a.time===t&&a.status!=='Cancelada');grid.insertAdjacentHTML('beforeend',`<div class="slot">${events.map(a=>`<div class="event" onclick="modifyAppointment('${esc(a.id)}')"><b>${esc(a.client)}</b>${esc(a.service)}</div>`).join('')}</div>`);});});
+};
+
+/* Administrar empresa abre directamente su centro de integraciones/configuración. */
+const previousRenderCompanies=window.renderCompanies;
+window.renderCompanies=function(){
+  previousRenderCompanies?.();
+  if(!isSuper())return;
+  const cards=[...document.querySelectorAll('#companyGrid .company-card')];
+  cards.forEach((card,index)=>{
+    const c=companies()[index];if(!c)return;
+    const row=card.querySelector('.v101-actions');
+    if(row){const admin=row.querySelector('button');if(admin){admin.textContent='Administrar empresa';admin.onclick=e=>{e.stopPropagation();sessionStorage.removeItem('galicia_preview_company');localStorage.setItem('galicia_selected_company',String(c.id));window.setGaliciaCompanyContext?.(c.id);show('integrations');};}}
+    const cfg=[...card.querySelectorAll('button')].find(b=>b.textContent.trim()==='Configurar');
+    if(cfg)cfg.textContent='Datos empresa';
+  });
+};
+
+/* Cabecera de Integraciones: deja claro qué empresa se está administrando. */
+function integrationContextNotice(){
+  const host=$('integrations');if(!host)return;
+  let n=$('tenantIntegrationNoticeV18');if(!n){n=document.createElement('div');n.id='tenantIntegrationNoticeV18';n.className='success-note';n.style.marginBottom='14px';host.prepend(n);}
+  const c=company(tenantId());
+  n.innerHTML=c?`<b>Administrando:</b> ${esc(c.name)} · Todas las integraciones y credenciales de esta pantalla pertenecen únicamente a esta empresa.`:`<b>Superadmin:</b> selecciona una empresa para configurar sus integraciones sin afectar a las demás.`;
+}
+
+const previousShow=window.show;
+window.show=function(id){
+  const r=previousShow?.apply(this,arguments);
+  if(id==='home')window.renderHome();
+  if(id==='appointments')window.renderAppointments();
+  if(id==='calendar')window.renderCalendar();
+  if(id==='integrations')integrationContextNotice();
+  window.updateKPIs();
+  return r;
+};
+
+/* Sincroniza todos los paneles cuando cambia el selector de empresa. */
+document.addEventListener('change',e=>{
+  if(['companyContextSelect','galiciaTenantSelectV10','galiciaTenantSelectV102'].includes(e.target?.id)){
+    setTimeout(()=>{window.renderHome();window.renderAppointments();window.renderCalendar();window.updateKPIs();integrationContextNotice();},0);
+  }
+});
+setTimeout(()=>{window.renderCompanies?.();window.renderHome();window.renderAppointments();window.updateKPIs();},1200);
+})();
+</script>
+
+</body>
+</html>
