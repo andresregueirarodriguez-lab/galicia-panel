@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Solicitud de contacto</title>
+<style>
+:root{--bg:#f4f6f8;--card:#fff;--fg:#0f172a;--muted:#64748b;--accent:#0f766e;--accent-d:#0b5c56;--border:#e2e8f0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding:24px 16px;min-height:100vh}
+.wrap{max-width:520px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 24px;box-shadow:0 1px 3px rgba(15,23,42,.06)}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 22px}
+label{display:block;font-size:13px;font-weight:600;margin:16px 0 6px}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:15px;font-family:inherit;background:#fff;color:var(--fg)}
+textarea{resize:vertical;min-height:70px}
+.row2{display:flex;gap:12px}
+.row2>div{flex:1;min-width:0}
+.chk{display:flex;align-items:center;gap:8px;margin-top:18px;font-size:14px;font-weight:400}
+.chk input{width:auto}
+button{margin-top:22px;width:100%;padding:13px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-size:15px;font-weight:600;cursor:pointer}
+button:hover{background:var(--accent-d)}
+button:disabled{opacity:.6;cursor:default}
+#msg{margin-top:16px;font-size:14px;padding:12px 14px;border-radius:8px;display:none}
+#msg.ok{display:block;background:#dcfce7;color:#166534}
+#msg.err{display:block;background:#fee2e2;color:#991b1b}
+#gate{padding:40px 20px;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card" id="formCard" style="display:none">
+    <h1 id="titulo">Solicitud de contacto</h1>
+    <p class="sub" id="subtitulo">Cuéntanos qué necesitas y te contactamos lo antes posible.</p>
+    <form id="f">
+      <label>Nombre y apellidos *</label>
+      <input id="nombre" required>
+      <div class="row2">
+        <div><label>Teléfono de contacto</label><input id="telefono" type="tel"></div>
+        <div><label>Correo electrónico</label><input id="email" type="email"></div>
+      </div>
+      <label>¿Qué servicio te interesa?</label>
+      <input id="tipo" placeholder="Ej: Comprar, Alquilar, Consulta...">
+      <label>Zona o ubicación de interés</label>
+      <input id="zona">
+      <div class="row2">
+        <div><label>Fecha preferida</label><input id="fecha" type="date"></div>
+        <div><label>Hora preferida</label><input id="hora" type="time"></div>
+      </div>
+      <label>¿Algo más que quieras contarnos?</label>
+      <textarea id="comentario"></textarea>
+      <label class="chk"><input id="contacto" type="checkbox"> Prefiero que me llamen en vez de responder por email</label>
+      <button id="btn" type="submit">Enviar solicitud</button>
+      <div id="msg"></div>
+    </form>
+  </div>
+  <div class="card" id="gate">Cargando…</div>
+</div>
+<script>
+const params=new URLSearchParams(location.search);
+const empresaId=params.get("empresa")||"";
+const nombreEmpresa=params.get("nombre")||"";
+const FN_URL="https://vzcnxmlamtxbxwieqypp.supabase.co/functions/v1/solicitud-publica";
+
+if(!/^[0-9a-f-]{36}$/i.test(empresaId)){
+  document.getElementById("gate").textContent="Este enlace de solicitud no es válido. Pide a la empresa un enlace actualizado.";
+}else{
+  document.getElementById("gate").style.display="none";
+  document.getElementById("formCard").style.display="block";
+  if(nombreEmpresa){
+    document.getElementById("titulo").textContent="Solicitud de contacto — "+nombreEmpresa;
+    document.title="Solicitud — "+nombreEmpresa;
+  }
+  document.getElementById("f").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const btn=document.getElementById("btn"), msg=document.getElementById("msg");
+    msg.className=""; msg.style.display="none";
+    const nombre=document.getElementById("nombre").value.trim();
+    const telefono=document.getElementById("telefono").value.trim();
+    const email=document.getElementById("email").value.trim();
+    if(!nombre || (!telefono && !email)){
+      msg.className="err"; msg.textContent="Indica tu nombre y al menos un teléfono o email de contacto."; return;
+    }
+    btn.disabled=true; btn.textContent="Enviando...";
+    try{
+      const r=await fetch(FN_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+        empresa_id:empresaId, nombre, telefono, email,
+        tipo:document.getElementById("tipo").value.trim(),
+        zona:document.getElementById("zona").value.trim(),
+        fecha:document.getElementById("fecha").value,
+        hora:document.getElementById("hora").value,
+        comentario:document.getElementById("comentario").value.trim(),
+        contacto:document.getElementById("contacto").checked
+      })});
+      const data=await r.json().catch(()=>({}));
+      if(r.ok && data.ok){
+        document.getElementById("f").style.display="none";
+        msg.className="ok"; msg.style.display="block";
+        msg.textContent="¡Gracias! Hemos recibido tu solicitud y nos pondremos en contacto contigo en breve.";
+      }else{
+        msg.className="err"; msg.style.display="block";
+        msg.textContent="No se ha podido enviar la solicitud. Inténtalo de nuevo en unos minutos.";
+        btn.disabled=false; btn.textContent="Enviar solicitud";
+      }
+    }catch(err){
+      msg.className="err"; msg.style.display="block";
+      msg.textContent="No se ha podido conectar. Comprueba tu conexión e inténtalo de nuevo.";
+      btn.disabled=false; btn.textContent="Enviar solicitud";
+    }
+  });
+}
+</script>
+</body>
+</html>

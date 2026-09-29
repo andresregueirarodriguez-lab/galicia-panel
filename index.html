@@ -915,6 +915,7 @@ window.renderCompanies=function(){
     <p><button class="btn small" onclick="editCompany('${esc2(c.id)}')">Configurar</button>
     ${authProfile?.is_superadmin&&!hasCfg?` <button class="btn small primary" onclick="completeCompanySetup('${esc2(c.id)}')">Completar alta</button>`:""}
     ${authProfile?.is_superadmin&&hasCfg&&!ready?` <button class="btn small primary" onclick="prepareMotorResources('${esc2(c.id)}',this)">Preparar motor</button>`:""}
+    <button class="btn small" data-link="https://andresregueirarodriguez-lab.github.io/galicia-panel/solicitud.html?empresa=${encodeURIComponent(c.id)}&nombre=${encodeURIComponent(c.name||"")}" onclick="navigator.clipboard.writeText(this.dataset.link)">Copiar solicitud</button>
     </p>
    </div>`;
  }).join("")+(authProfile?.is_superadmin?`<div class="card" style="text-align:center;cursor:pointer" onclick="openCompany()"><h2 style="color:var(--accent)">＋</h2><b>Añadir empresa</b><p class="muted">Alta automática</p></div>`:"");
