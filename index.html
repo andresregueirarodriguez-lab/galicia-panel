@@ -382,8 +382,18 @@ function appointmentFromDb(a){
  const estado=String(a.estado||"pendiente").toLowerCase();
  return {id:a.id,company:a.empresa_id,client:a.nombre_cliente||a.nombre||"Cliente",phone:a.telefono||"",service:a.operacion||a.servicio||"",origin:a.origen||"",date:dt?dt.toLocaleDateString("sv-SE",{timeZone:"Europe/Madrid"}):"",time:dt?dt.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",hour12:false,timeZone:"Europe/Madrid"}):"",status:estado==="confirmada"?"Confirmada":estado==="cancelada"?"Cancelada":"Pendiente",event:a.event_id||"",note:a.notas||""};
 }
+let claveMotorCache=null;
+async function getClaveMotor(){
+ if(claveMotorCache) return claveMotorCache;
+ const {data,error}=await sb.rpc("galicia_obtener_clave_motor");
+ if(error||!data) throw new Error("No se pudo obtener la clave del motor: "+(error?.message||"vacía"));
+ claveMotorCache=data;
+ return claveMotorCache;
+}
 async function postMotor(payload){
- const r=await fetch(MOTOR_WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+ const clave=await getClaveMotor();
+ const body=Object.assign({clave_motor:clave},payload);
+ const r=await fetch(MOTOR_WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
  if(!r.ok) throw new Error("Motor Make HTTP "+r.status);
  return r;
 }
