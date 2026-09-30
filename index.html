@@ -337,7 +337,6 @@ loadState();renderAll();
 /* ===== GalicIA · capa real multiempresa ===== */
 const SUPABASE_URL = "https://vzcnxmlamtxbxwieqypp.supabase.co";
 const SUPABASE_KEY = "sb_publishable_iAQauUpghQnEPe0fdyMgvA_MVxdHU0M";
-const MOTOR_WEBHOOK = "https://hook.eu1.make.com/e4im9smt2cfeb2p73kps2n78iczutq03";
 let sb;
 try{
   if(!window.supabase) throw new Error("No se pudo cargar la librería de Supabase. Comprueba que tienes Internet y vuelve a abrir el archivo.");
@@ -382,20 +381,17 @@ function appointmentFromDb(a){
  const estado=String(a.estado||"pendiente").toLowerCase();
  return {id:a.id,company:a.empresa_id,client:a.nombre_cliente||a.nombre||"Cliente",phone:a.telefono||"",service:a.operacion||a.servicio||"",origin:a.origen||"",date:dt?dt.toLocaleDateString("sv-SE",{timeZone:"Europe/Madrid"}):"",time:dt?dt.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",hour12:false,timeZone:"Europe/Madrid"}):"",status:estado==="confirmada"?"Confirmada":estado==="cancelada"?"Cancelada":"Pendiente",event:a.event_id||"",note:a.notas||""};
 }
-let claveMotorCache=null;
-async function getClaveMotor(){
- if(claveMotorCache) return claveMotorCache;
- const {data,error}=await sb.rpc("galicia_obtener_clave_motor");
- if(error||!data) throw new Error("No se pudo obtener la clave del motor: "+(error?.message||"vacía"));
- claveMotorCache=data;
- return claveMotorCache;
-}
-async function postMotor(payload){
- const clave=await getClaveMotor();
- const body=Object.assign({clave_motor:clave},payload);
- const r=await fetch(MOTOR_WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
- if(!r.ok) throw new Error("Motor Make HTTP "+r.status);
- return r;
+// La clave del Motor NUNCA sale de Supabase hacia el navegador: panel-api la añade
+// en el servidor y comprueba con puede_acceder_empresa() que este usuario tiene
+// acceso a la empresa antes de tocar su calendario.
+async function callPanelApi(accion,extra){
+ const {data:sess}=await sb.auth.getSession();
+ const token=sess?.session?.access_token;
+ if(!token) throw new Error("Sesión no válida. Vuelve a iniciar sesión.");
+ const r=await fetch(SUPABASE_URL+"/functions/v1/panel-api",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify(Object.assign({accion},extra))});
+ let j=null; try{j=await r.json()}catch(e){}
+ if(!r.ok||!j||j.ok!==true) throw new Error((j&&(j.error||j.detalle))||("Motor HTTP "+r.status));
+ return j;
 }
 async function loginReal(e){
  e.preventDefault(); document.getElementById("authError").style.display="none"; document.getElementById("loginBtn").disabled=true; document.getElementById("loginBtn").textContent="Entrando...";
@@ -485,7 +481,7 @@ async function saveCompany(e){
    // Alta automática solo si aún no hay recursos propios
    const integ=existing?.integraciones||{};
    if(!existing || !integ.calendar_id || !integ.spreadsheet_id){
-     await postMotor({accion:"ALTA_EMPRESA",empresa_id:empresaId,nombre_empresa:empresaPayload.nombre_comercial,sector,email:empresaPayload.email||"",telefono:empresaPayload.whatsapp_numero||""});
+     await callPanelApi("alta_empresa",{empresa_id:empresaId});
    }
    closeModal("companyModal");
    await refreshRealData();
@@ -511,7 +507,7 @@ async function completeCompanySetup(id){
      const {error}=await sb.from("motor_config_empresa").insert({empresa_id:id,sector,zona_horaria:"Europe/Madrid",duracion_cita_min:30,n_alternativas:3,derivar_humano:true,tono_ia:"Profesional, cercano y natural",reglas_ia:"Nunca inventes disponibilidad. Respeta horarios y bloqueos.",servicios:servicesJSON("",sector),horarios:defaultSchedule(),festivos:[],integraciones:{},campos_cliente:[],activo:true});
      if(error)throw error;
    }
-   await postMotor({accion:"ALTA_EMPRESA",empresa_id:id,nombre_empresa:c.name,sector:normSector(c.sector),email:c.email||"",telefono:c.whatsapp||""});
+   await callPanelApi("alta_empresa",{empresa_id:id});
    alert("Alta enviada al Motor Único. Actualiza en unos segundos para comprobar Calendar y Sheet.");
    setTimeout(refreshRealData,1800);
  }catch(err){alert("Error al completar el alta: "+err.message)}
@@ -528,7 +524,7 @@ async function applyModification(){
  const btn=document.querySelector('#modifyModal .btn.primary');btn.disabled=true;btn.textContent="Enviando...";
  try{
    const nueva=`${modDate.value} ${modTime.value}`;
-   await postMotor({accion:"MODIFICAR_CITA",empresa_id:a.company,Event_ID:a.event,ID_CITA:a.id,Cita_actual:`${a.date} ${a.time}`,Disponibilidad:nueva,nueva_fecha:modDate.value,nueva_hora:modTime.value,nota:modNote.value||""});
+   await callPanelApi("modificar_cita",{empresa_id:a.company,cita_id:a.id,fecha:modDate.value,hora:modTime.value});
    closeModal("modifyModal");
    alert("Modificación enviada al Motor Único. Calendar y registros se actualizarán desde Make.");
    setTimeout(refreshRealData,1800);
@@ -695,19 +691,17 @@ window.saveAppointment = async function(e){
   const submit=$("appointmentForm").querySelector('button.btn.primary');
   submit.disabled=true; submit.textContent="Enviando...";
   try{
-    await postMotor({
-      accion:"SOLICITUD_CLIENTE",
+    await callPanelApi("crear_cita",{
       empresa_id:companyId,
-      canal:"Interfaz GalicIA",
       nombre:$("apClient").value.trim(),
       telefono:$("apPhone").value.trim(),
       email:$("apEmail").value.trim(),
       tipo:$("apService").value.trim(),
-      inmueble:"",
+      servicio:$("apService").value.trim(),
       zona:"",
       fecha:$("apDate").value,
       hora:$("apTime").value,
-      mensaje:$("apNote").value.trim()||"Crear cita desde la interfaz"
+      notas:$("apNote").value.trim()||"Crear cita desde la interfaz"
     });
     closeModal("appointmentModal");
     alert("Solicitud enviada al Motor Único. La disponibilidad la validará Google Calendar antes de confirmar.");
@@ -874,16 +868,7 @@ window.prepareMotorResources=async function(id,button){
  if(i.calendar&&i.sheet){alert("Esta empresa ya tiene Calendar y Sheet asociados.");return}
  if(button){button.disabled=true;button.textContent="Enviando alta...";}
  try{
-   // Exact payload required by Make's ALTA_EMPRESA router.
-   const payload={
-     accion:"ALTA_EMPRESA",
-     empresa_id:String(c.id),
-     nombre_empresa:String(c.name||""),
-     sector:String(mc.sector||c.sector||"general"),
-     email:String(c.email||""),
-     telefono:String(c.whatsapp||"")
-   };
-   await postMotor(payload);
+   await callPanelApi("alta_empresa",{empresa_id:String(c.id)});
    alert("Alta de recursos enviada al Motor Único. No vuelvas a pulsar mientras Make la procesa.");
    // Do not falsely mark ready. Reload from Supabase and show actual state.
    await new Promise(r=>setTimeout(r,1800));
