@@ -1600,11 +1600,12 @@ async function render(){
  const run=++revision,cid=selected();panel.replaceChildren(el('h2','Centro de gestión'),el('p','Empresas, recursos y configuración desde un mismo lugar.'));
  panel.setAttribute('aria-busy','true');
  try{
- const [permission,configs,companies]=await Promise.all([sb.rpc('es_superadmin'),sb.from('motor_config_empresa').select('*'),sb.from('empresas').select('id,nombre,activa,plan,email,whatsapp_phone,whatsapp_phone_number_id,whatsapp_enabled,ia_whatsapp_enabled,updated_at')]);
+ const [permission,configs,companies,gmailRows]=await Promise.all([sb.rpc('es_superadmin'),sb.from('motor_config_empresa').select('*'),sb.from('empresas').select('id,nombre,activa,plan,email,whatsapp_phone,whatsapp_phone_number_id,whatsapp_enabled,ia_whatsapp_enabled,updated_at'),sb.from('canal_gmail').select('empresa_id,direccion')]);
  if(run!==revision)return;
- for(const r of [permission,configs,companies])if(r.error)throw r.error;
+ for(const r of [permission,configs,companies,gmailRows])if(r.error)throw r.error;
  const superadmin=permission.data===true;
  motorConfigs=configs.data||[];
+ const gmailAliases=gmailRows.data||[];
  const rows=companies.data||[];
  const toolbar=el('div');toolbar.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin:16px 0';
  toolbar.append(button('Actualizar estado',render));
@@ -1687,6 +1688,34 @@ async function render(){
      finally{if(run===revision)waSave.disabled=false}
    };
  }
+ const gm=el('div');gm.className='card';
+ gm.append(el('h3','Correo (Gmail) · alias de contacto'));
+ gm.append(el('p','Los correos que reciba esta empresa llegan al buzón compartido de la agencia. Para que el Motor sepa que un email es de esta empresa, el cliente debe recibir sus correos en un alias del tipo inteligenciaartificialgalicia+tunombre@gmail.com. Añade aquí ese alias (puedes crear los que hagan falta).'));
+ const aliasesNow=gmailAliases.filter(g=>g.empresa_id===cid);
+ const gmList=el('ul');gmList.style.cssText='padding-left:18px;margin:8px 0';
+ for(const g of aliasesNow){const li=el('li',g.direccion+' ');if(superadmin){const rm=button('Quitar',async()=>{if(run!==revision||selected()!==cid)return;const{error}=await sb.from('canal_gmail').delete().eq('empresa_id',cid).eq('direccion',g.direccion);if(error){alert(error.message);return}await render()});li.append(rm)}gmList.append(li)}
+ if(!aliasesNow.length)gmList.append(el('li','Todavía no tiene ningún alias de correo configurado.'));
+ gm.append(gmList);
+ if(superadmin){
+   const gmForm=el('form');gmForm.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:flex-end';
+   const gmField=el('label','Nuevo alias'),gmInput=el('input');gmInput.type='email';gmInput.placeholder='inteligenciaartificialgalicia+tunombre@gmail.com';gmInput.style.cssText='display:block;min-width:280px;margin-top:6px';gmField.append(gmInput);
+   const gmStatus=el('p');gmStatus.setAttribute('role','status');
+   const gmSave=button('Añadir alias',()=>{});gmSave.type='submit';
+   gmForm.append(gmField,gmSave,gmStatus);gm.append(gmForm);
+   gmForm.onsubmit=async event=>{
+     event.preventDefault();if(run!==revision||selected()!==cid)return;
+     const direccion=gmInput.value.trim().toLowerCase();
+     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(direccion)){gmStatus.textContent='Ese email no tiene un formato válido.';return}
+     gmSave.disabled=true;gmStatus.textContent='Guardando…';
+     try{
+       const{error}=await sb.from('canal_gmail').insert({empresa_id:cid,direccion});
+       if(error)throw error.code==='23505'?Error('Ese alias ya está asignado a otra empresa.'):error;
+       gmInput.value='';await render();
+     }catch(e){if(run===revision)gmStatus.textContent=e.message}
+     finally{if(run===revision)gmSave.disabled=false}
+   };
+ }
+ panel.append(gm);
  const pending=el('div');pending.className='card';pending.append(el('h3','Pendientes de integración'),el('p','Selector público con disponibilidad real, alternativas cercanas y botones de confirmación o modificación: requieren el servicio de reservas. WhatsApp se completará después. Guardar un correo o teléfono no conecta por sí solo estas funciones.'));panel.append(pending);
  }catch(e){if(run===revision)panel.append(el('p','No se pudo cargar el centro: '+e.message),button('Reintentar',render))}finally{if(run===revision)panel.setAttribute('aria-busy','false')}
 }
