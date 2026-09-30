@@ -219,6 +219,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px
 <div id="companyModal" class="modal"><div class="modalbox"><div class="modalhead"><h2 id="companyModalTitle">Nueva empresa</h2><button class="btn small" onclick="closeModal('companyModal')">✕</button></div><form id="companyForm" class="formgrid" onsubmit="saveCompany(event)">
 <div class="field"><label>Nombre</label><input id="coName" required></div>
 <div class="field"><label>Sector</label><select id="coSector" required><option value="inmobiliaria">Inmobiliaria</option><option value="dental">Clínica dental</option><option value="peluqueria">Peluquería / estética</option><option value="fisioterapia">Fisioterapia</option><option value="general">Otro</option></select></div>
+<div class="field"><label>Producto</label><select id="coPlan" required><option value="citou">CitOU · solo WhatsApp, sin panel (45€/mes)</option><option value="galicia">GalicIA Soluciones Empresariales · panel + WhatsApp (129€/mes)</option></select></div>
 <div class="field"><label>Email</label><input id="coEmail" type="email"></div><div class="field"><label>Teléfono / WhatsApp</label><input id="coWhatsapp"></div>
 <div class="field"><label>Provincia</label><input id="coProvince" value="Ourense"></div><div class="field"><label>Municipio</label><input id="coMunicipality" value="Ourense"></div>
 <div class="field"><label>Duración cita (min)</label><input id="coDuration" type="number" min="5" step="5" value="30"></div>
@@ -374,7 +375,7 @@ function servicesJSON(text,sector){
  return use.map(nombre=>({nombre,activo:true}));
 }
 function companyFromDb(c){
- return {id:c.id,name:c.nombre_comercial||c.nombre||"Empresa",sector:c.sector||"General",email:c.email||"",whatsapp:c.whatsapp_numero||c.telefono||"",province:c.provincia||"",municipality:c.municipio||"",services:"",notes:"",active:c.activa!==false};
+ return {id:c.id,name:c.nombre_comercial||c.nombre||"Empresa",sector:c.sector||"General",plan:c.plan||"galicia",email:c.email||"",whatsapp:c.whatsapp_numero||c.telefono||"",province:c.provincia||"",municipality:c.municipio||"",services:"",notes:"",active:c.activa!==false};
 }
 function appointmentFromDb(a){
  const dt=a.inicio?new Date(a.inicio):null;
@@ -442,12 +443,12 @@ async function refreshRealData(){
 }
 function openCompany(){
  if(!authProfile?.is_superadmin){alert("Solo el superadministrador puede dar de alta empresas.");return}
- companyForm.reset();coId.value="";coDuration.value="30";coTimezone.value="Europe/Madrid";coProvince.value="Ourense";coMunicipality.value="Ourense";companyModalTitle.textContent="Nueva empresa";openModal("companyModal");
+ companyForm.reset();coId.value="";coPlan.value="citou";coDuration.value="30";coTimezone.value="Europe/Madrid";coProvince.value="Ourense";coMunicipality.value="Ourense";companyModalTitle.textContent="Nueva empresa";openModal("companyModal");
 }
 function editCompany(id){
  const c=state.companies.find(x=>x.id===id); if(!c)return;
  const mc=motorConfigs.find(m=>m.empresa_id===id);
- coId.value=c.id;coName.value=c.name;coSector.value=normSector(mc?.sector||c.sector);coEmail.value=c.email||"";coWhatsapp.value=c.whatsapp||"";coProvince.value=c.province||"";coMunicipality.value=c.municipality||"";
+ coId.value=c.id;coName.value=c.name;coSector.value=normSector(mc?.sector||c.sector);coPlan.value=c.plan||"galicia";coEmail.value=c.email||"";coWhatsapp.value=c.whatsapp||"";coProvince.value=c.province||"";coMunicipality.value=c.municipality||"";
  coDuration.value=mc?.duracion_cita_min||30;coTimezone.value=mc?.zona_horaria||"Europe/Madrid";
  coServices.value=Array.isArray(mc?.servicios)?mc.servicios.map(x=>x.nombre||x).join(", "):"";
  coNotes.value=mc?.reglas_ia||"";
@@ -460,7 +461,7 @@ async function saveCompany(e){
  try{
    const sector=normSector(coSector.value);
    let empresaId=coId.value||null;
-   const empresaPayload={nombre:coName.value.trim(),nombre_comercial:coName.value.trim(),sector:sector,email:coEmail.value.trim()||null,whatsapp_numero:coWhatsapp.value.trim()||null,provincia:coProvince.value.trim()||null,municipio:coMunicipality.value.trim()||null,activa:true};
+   const empresaPayload={nombre:coName.value.trim(),nombre_comercial:coName.value.trim(),sector:sector,plan:coPlan.value==="citou"?"citou":"galicia",email:coEmail.value.trim()||null,whatsapp_numero:coWhatsapp.value.trim()||null,provincia:coProvince.value.trim()||null,municipio:coMunicipality.value.trim()||null,activa:true};
    if(empresaId){
      const {error}=await sb.from("empresas").update(empresaPayload).eq("id",empresaId); if(error)throw error;
    }else{
@@ -495,7 +496,7 @@ function renderCompanies(){
  companyGrid.innerHTML=arr.map(c=>{
    const mc=motorConfigs.find(m=>m.empresa_id===c.id), integ=mc?.integraciones||{};
    const ready=!!(mc&&integ.calendar_id&&integ.spreadsheet_id);
-   return `<div class="card company-card"><div class="company-icon">${escapeHtml(c.name.split(" ").map(x=>x[0]).slice(0,2).join("").toUpperCase())}</div><h3>${escapeHtml(c.name)}</h3><p class="muted">${escapeHtml(c.sector)} · ${escapeHtml(c.municipality||"")}</p><span class="pill ${ready?"ok":"warn"}">${ready?"Motor configurado":"Alta pendiente"}</span><p><button class="btn small" onclick="editCompany('${c.id}')">Configurar</button>${authProfile?.is_superadmin&&!ready?` <button class="btn small primary" onclick="completeCompanySetup('${c.id}')">Completar alta</button>`:""}</p></div>`;
+   return `<div class="card company-card"><div class="company-icon">${escapeHtml(c.name.split(" ").map(x=>x[0]).slice(0,2).join("").toUpperCase())}</div><h3>${escapeHtml(c.name)}</h3><p class="muted">${escapeHtml(c.sector)} · ${escapeHtml(c.municipality||"")}</p><span class="pill neutral">${c.plan==="citou"?"CitOU · solo WhatsApp":"GalicIA · panel + WhatsApp"}</span> <span class="pill ${ready?"ok":"warn"}">${ready?"Motor configurado":"Alta pendiente"}</span><p><button class="btn small" onclick="editCompany('${c.id}')">Configurar</button>${authProfile?.is_superadmin&&!ready?` <button class="btn small primary" onclick="completeCompanySetup('${c.id}')">Completar alta</button>`:""}</p></div>`;
  }).join("")+(authProfile?.is_superadmin?`<div class="card" style="text-align:center;cursor:pointer" onclick="openCompany()"><h2 style="color:var(--accent)">＋</h2><b>Añadir empresa</b><p class="muted">Alta automática</p></div>`:"");
 }
 async function completeCompanySetup(id){
@@ -1599,7 +1600,7 @@ async function render(){
  const run=++revision,cid=selected();panel.replaceChildren(el('h2','Centro de gestión'),el('p','Empresas, recursos y configuración desde un mismo lugar.'));
  panel.setAttribute('aria-busy','true');
  try{
- const [permission,configs,companies]=await Promise.all([sb.rpc('es_superadmin'),sb.from('motor_config_empresa').select('*'),sb.from('empresas').select('id,nombre,activa,whatsapp_phone,whatsapp_phone_number_id,whatsapp_enabled,ia_whatsapp_enabled,updated_at')]);
+ const [permission,configs,companies]=await Promise.all([sb.rpc('es_superadmin'),sb.from('motor_config_empresa').select('*'),sb.from('empresas').select('id,nombre,activa,plan,email,whatsapp_phone,whatsapp_phone_number_id,whatsapp_enabled,ia_whatsapp_enabled,updated_at')]);
  if(run!==revision)return;
  for(const r of [permission,configs,companies])if(r.error)throw r.error;
  const superadmin=permission.data===true;
@@ -1614,7 +1615,7 @@ async function render(){
  const search=el('input');search.placeholder='Buscar empresa…';search.setAttribute('aria-label','Buscar empresa');panel.append(search);
  const wrap=el('div');wrap.style.overflowX='auto';const table=el('table');table.style.width='100%';wrap.append(table);panel.append(wrap);
  const header=el('tr');for(const t of ['Empresa','Recursos asignados','Revisión','Gestión'])header.append(el('th',t));table.append(header);
- for(const c of rows){const cfg=motorConfigs.find(m=>m.empresa_id===c.id),i=json(cfg?.integraciones);const tr=el('tr');tr.dataset.search=c.nombre.toLowerCase();tr.append(el('td',c.nombre+(c.activa?'':' · Inactiva')));
+ for(const c of rows){const cfg=motorConfigs.find(m=>m.empresa_id===c.id),i=json(cfg?.integraciones);const tr=el('tr');tr.dataset.search=c.nombre.toLowerCase();tr.append(el('td',c.nombre+' · '+(c.plan==='citou'?'CitOU':'GalicIA')+(c.activa?'':' · Inactiva')));
  tr.append(el('td',[i.calendar_id?'Calendar':'Sin Calendar',i.spreadsheet_id?'Sheets':'Sin Sheets'].join(' · ')));
  const duplicate=motorConfigs.some(m=>m.empresa_id!==c.id&&((i.calendar_id&&json(m.integraciones).calendar_id===i.calendar_id)||(i.spreadsheet_id&&json(m.integraciones).spreadsheet_id===i.spreadsheet_id)));
  tr.append(el('td',duplicate?'Revisar: recurso compartido':!cfg?'Falta configuración':'WhatsApp pendiente de prueba'));
@@ -1645,7 +1646,47 @@ async function render(){
  let q=sb.from('motor_config_empresa').update(patch).eq('empresa_id',cid);q=current.updated_at?q.eq('updated_at',current.updated_at):q.is('updated_at',null);const result=await q.select('*').maybeSingle();if(result.error)throw result.error;if(!result.data)throw Error('Los datos cambiaron o no tienes permiso. Actualiza antes de guardar.');
  if(run!==revision)return;current=result.data;integrations=json(current.integraciones);motorConfigs=motorConfigs.map(m=>m.empresa_id===cid?current:m);status.textContent='Guardado en Supabase. La activación de canales requiere completar su conexión.';
  }catch(e){if(run===revision)status.textContent=e.message}finally{if(run===revision)save.disabled=!editable}};
- const wa=el('div');wa.className='card';wa.append(el('h3','WhatsApp · preparación del canal'),el('p','Número registrado: '+(company.whatsapp_phone||'Pendiente')),el('p','Phone Number ID: '+(company.whatsapp_phone_number_id||'Pendiente')),el('p','Recepción configurada: '+(company.whatsapp_enabled?'Sí':'No')+' · IA marcada: '+(company.ia_whatsapp_enabled?'Sí':'No')),el('p','El envío automático y la respuesta del agente aún no están verificados. Los indicadores anteriores son configuración, no una prueba de funcionamiento.'));panel.append(wa);
+ const isCitou=company.plan==='citou';
+ const wa=el('div');wa.className='card';
+ const waTitle=isCitou?'Alta de WhatsApp para CitOU (solo WhatsApp, sin panel)':'Alta de WhatsApp para GalicIA Soluciones Empresariales (panel + WhatsApp)';
+ wa.append(el('h3',waTitle));
+ wa.append(el('p',isCitou
+   ?'Este cliente no tiene panel: la única forma de que vea sus citas es que reciba los mensajes por WhatsApp y que el Google Calendar creado en su alta esté compartido con su email de contacto ('+(company.email||'sin email guardado, revisa la ficha de la empresa')+'). Rellena aquí los datos del número verificado en Meta antes de activar.'
+   :'Este cliente también tiene acceso al panel (pestañas Citas y Calendario). WhatsApp es un canal más de entrada de citas; no sustituye al panel.'));
+ if(!superadmin){
+   wa.append(el('p','Solo el superadministrador puede dar de alta o cambiar el número de WhatsApp de una empresa.'));
+   wa.append(el('p','Número registrado: '+(company.whatsapp_phone||'Pendiente')+' · Phone Number ID: '+(company.whatsapp_phone_number_id||'Pendiente')+' · Recepción: '+(company.whatsapp_enabled?'Activa':'Inactiva')+' · IA: '+(company.ia_whatsapp_enabled?'Activa':'Inactiva')));
+   panel.append(wa);
+ }else{
+   const waForm=el('form');waForm.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:10px';
+   const fPhone=el('label','Número verificado (+34…)'),iPhone=el('input');iPhone.type='tel';iPhone.placeholder='+34600111222';iPhone.style.cssText='display:block;width:100%;margin-top:6px';iPhone.value=company.whatsapp_phone||'';fPhone.append(iPhone);
+   const fPnid=el('label','Phone Number ID (Meta Business Manager)'),iPnid=el('input');iPnid.placeholder='Ej. 109876543210987';iPnid.style.cssText='display:block;width:100%;margin-top:6px';iPnid.value=company.whatsapp_phone_number_id||'';fPnid.append(iPnid);
+   const fEnabled=el('label'),iEnabled=document.createElement('input');iEnabled.type='checkbox';iEnabled.checked=!!company.whatsapp_enabled;fEnabled.append(iEnabled,document.createTextNode(' Recepción de WhatsApp activada'));
+   const fIa=el('label'),iIa=document.createElement('input');iIa.type='checkbox';iIa.checked=!!company.ia_whatsapp_enabled;fIa.append(iIa,document.createTextNode(' Respuesta automática de la IA activada'));
+   const waStatus=el('p');waStatus.setAttribute('role','status');waStatus.style.gridColumn='1 / -1';
+   const waSave=button(isCitou?'Guardar alta de WhatsApp (CitOU)':'Guardar alta de WhatsApp (GalicIA)',()=>{});waSave.type='submit';
+   waForm.append(fPhone,fPnid,fEnabled,fIa,waStatus,waSave);
+   wa.append(waForm);panel.append(wa);
+   waForm.onsubmit=async event=>{
+     event.preventDefault();if(run!==revision||selected()!==cid)return;
+     waSave.disabled=true;waStatus.textContent='Guardando…';
+     try{
+       const phone=iPhone.value.trim();if(phone&&!/^\+[1-9]\d{7,14}$/.test(phone))throw Error('Teléfono con + y prefijo, sin espacios.');
+       const pnid=iPnid.value.trim();
+       if(pnid){const dup=rows.find(r=>r.id!==cid&&r.whatsapp_phone_number_id===pnid);if(dup)throw Error('Ese Phone Number ID ya está asignado a "'+dup.nombre+'". Cada empresa necesita su propio número.')}
+       if((iEnabled.checked||iIa.checked)&&(!phone||!pnid))throw Error('Para activar recepción o IA hacen falta el número y el Phone Number ID.');
+       const patch={whatsapp_phone:phone||null,whatsapp_phone_number_id:pnid||null,whatsapp_enabled:iEnabled.checked,ia_whatsapp_enabled:iIa.checked};
+       let q=sb.from('empresas').update(patch).eq('id',cid);q=company.updated_at?q.eq('updated_at',company.updated_at):q.is('updated_at',null);
+       const result=await q.select('id,nombre,activa,plan,email,whatsapp_phone,whatsapp_phone_number_id,whatsapp_enabled,ia_whatsapp_enabled,updated_at').maybeSingle();
+       if(result.error)throw result.error;
+       if(!result.data)throw Error('Los datos cambiaron o no tienes permiso. Vuelve a Actualizar estado antes de guardar.');
+       if(run!==revision)return;
+       Object.assign(company,result.data);
+       waStatus.textContent='Guardado. Comprueba que el escenario de WhatsApp en Make está activo antes de probar con un mensaje real.';
+     }catch(e){if(run===revision)waStatus.textContent=e.message}
+     finally{if(run===revision)waSave.disabled=false}
+   };
+ }
  const pending=el('div');pending.className='card';pending.append(el('h3','Pendientes de integración'),el('p','Selector público con disponibilidad real, alternativas cercanas y botones de confirmación o modificación: requieren el servicio de reservas. WhatsApp se completará después. Guardar un correo o teléfono no conecta por sí solo estas funciones.'));panel.append(pending);
  }catch(e){if(run===revision)panel.append(el('p','No se pudo cargar el centro: '+e.message),button('Reintentar',render))}finally{if(run===revision)panel.setAttribute('aria-busy','false')}
 }
